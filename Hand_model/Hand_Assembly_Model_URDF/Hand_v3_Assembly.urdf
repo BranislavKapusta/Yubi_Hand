@@ -1,0 +1,597 @@
+<?xml version='1.0' encoding='utf-8'?>
+<robot name="Hand_v3_Assembly">
+
+    <!-- ==================== BASE LINK ==================== -->
+    <link name="Hand_Mount_plate_v2">
+        <inertial>
+            <origin xyz="-0.021801300876253597 -0.07659074890390893 0.005225757238851649" rpy="0.0 0.0 0.0" />
+            <mass value="0.0928993354040722" />
+            <inertia ixx="3.887795517288267e-05" iyy="7.284729844729578e-05" izz="4.272453762225422e-05" ixy="-1.3392208078179144e-11" iyz="6.325476010812798e-09" ixz="5.11848397972947e-11" />
+        </inertial>
+        <visual name="Hand_Mount_plate_v2_visual">
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+            <geometry>
+                <mesh filename="meshes/Hand_Mount_plate_v2.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+        </visual>
+        <collision name="Hand_Mount_plate_v2_collision">
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+            <geometry>
+                <mesh filename="meshes/Hand_Mount_plate_v2.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+        </collision>
+    </link>
+
+    <!-- ==================== MOUNT ==================== -->
+    <link name="Hand_Mount_p1">
+        <inertial>
+            <origin xyz="0.00043783538525168366 -0.00015522168230110023 0.016345920047245992" rpy="0.0 0.0 0.0" />
+            <mass value="0.025902234704297027" />
+            <inertia ixx="2.698187303718521e-06" iyy="6.011011483983624e-06" izz="5.699363688931818e-06" ixy="-8.508795038666184e-08" iyz="5.2874719195819016e-09" ixz="-7.549356094718684e-08" />
+        </inertial>
+        <visual name="Hand_Mount_p1_visual">
+            <origin xyz="0.023462310497703275 -0.005499999999999974 0.006674869999970943" rpy="1.5707963267948966 0.0 -3.141592653589793" />
+            <geometry>
+                <mesh filename="meshes/Hand_Mount_p1.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+        </visual>
+        <collision name="Hand_Mount_p1_collision">
+            <origin xyz="0.023462310497703275 -0.005499999999999974 0.006674869999970943" rpy="1.5707963267948966 0.0 -3.141592653589793" />
+            <geometry>
+                <mesh filename="meshes/Hand_Mount_p1.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+        </collision>
+    </link>
+
+    <!-- ==================== PALM ==================== -->
+    <link name="Hand_Palm_2">
+        <inertial>
+            <origin xyz="0.00019421461378276605 -0.01795625190814511 0.004656821520625335" rpy="0.0 0.0 0.0" />
+            <mass value="0.039955528778484704" />
+            <inertia ixx="1.4824571477627809e-05" iyy="1.57305026726488e-05" izz="2.5669382914872974e-05" ixy="-2.301990546101937e-06" iyz="6.388103414152378e-07" ixz="-2.0451121230699837e-06" />
+        </inertial>
+        <visual name="Hand_Palm_2_visual">
+            <origin xyz="-0.016355240000000014 -0.032 0.004" rpy="0.0 0.0 3.1415926535897927" />
+            <geometry>
+                <mesh filename="meshes/Hand_Palm_2.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+        </visual>
+        <collision name="Hand_Palm_2_collision">
+            <origin xyz="-0.016355240000000014 -0.032 0.004" rpy="0.0 0.0 3.1415926535897927" />
+            <geometry>
+                <mesh filename="meshes/Hand_Palm_2.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="Hand_Palm_3">
+        <inertial>
+            <origin xyz="-0.0038337162798402157 0.031513217196976966 -0.008528785800387857" rpy="0.0 0.0 0.0" />
+            <mass value="0.06732620296664459" />
+            <inertia ixx="3.5854597550320964e-05" iyy="2.6791701452513507e-05" izz="5.101015453767389e-05" ixy="-2.5717872156450795e-06" iyz="-1.4359611583566058e-06" ixz="4.758075459345695e-06" />
+        </inertial>
+        <visual name="Hand_Palm_3_visual">
+            <origin xyz="0.014355240000000012 0.0395 -0.014499999999999999" rpy="0.0 0.0 0.0" />
+            <geometry>
+                <mesh filename="meshes/Hand_Palm_3.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+        </visual>
+        <collision name="Hand_Palm_3_collision">
+            <origin xyz="0.014355240000000012 0.0395 -0.014499999999999999" rpy="0.0 0.0 0.0" />
+            <geometry>
+                <mesh filename="meshes/Hand_Palm_3.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="Hand_Palm_3_lock">
+        <inertial>
+            <origin xyz="-0.023866194076934483 0.009884262019643486 -0.022828717683895317" rpy="0.0 0.0 0.0" />
+            <mass value="0.039046838388175936" />
+            <inertia ixx="1.4885691954984018e-05" iyy="2.4528734577235594e-05" izz="1.4560812290889963e-05" ixy="1.945699328601411e-06" iyz="-5.876873778040696e-07" ixz="-2.1171514311871955e-06" />
+        </inertial>
+        <visual name="Hand_Palm_3_lock_visual">
+            <origin xyz="-0.03957226 0.0105 -0.03678373" rpy="-1.5707963267948966 0.0 3.141592653589793" />
+            <geometry>
+                <mesh filename="meshes/Hand_Palm_3_lock.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+        </visual>
+        <collision name="Hand_Palm_3_lock_collision">
+            <origin xyz="-0.03957226 0.0105 -0.03678373" rpy="-1.5707963267948966 0.0 3.141592653589793" />
+            <geometry>
+                <mesh filename="meshes/Hand_Palm_3_lock.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+        </collision>
+    </link>
+
+    <!-- ==================== INDEX FINGER ==================== -->
+    <link name="Finger_Base_index">
+        <inertial>
+            <origin xyz="-3.4496898892921737e-06 0.004736775999703562 0.009057004017487543" rpy="0.0 0.0 0.0" />
+            <mass value="0.007976429781331111" />
+            <inertia ixx="3.152851683604515e-06" iyy="3.224766131102703e-06" izz="4.6548169143744853e-07" ixy="-1.9241306047427946e-10" iyz="2.230666255448228e-08" ixz="-1.2140135855250452e-10" />
+        </inertial>
+        <visual name="Finger_Base_index_visual">
+            <origin xyz="0.0025000027725908193 0.0055000000000000075 0.028699998393310246" rpy="0.0 1.5707963267948966 0.0" />
+            <geometry>
+                <mesh filename="meshes/Finger_part_Base_special.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+        </visual>
+        <collision name="Finger_Base_index_collision">
+            <origin xyz="0.0025000027725908193 0.0055000000000000075 0.028699998393310246" rpy="0.0 1.5707963267948966 0.0" />
+            <geometry>
+                <mesh filename="meshes/Finger_part_Base_special.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="Finger_p1_index">
+        <inertial>
+            <origin xyz="0.0032186989014055534 0.01760059733734403 -0.00033854591421677015" rpy="0.0 0.0 0.0" />
+            <mass value="0.007285673416598265" />
+            <inertia ixx="1.1956307500935107e-06" iyy="2.3216955696095017e-07" izz="1.1591213139311435e-06" ixy="-3.396646767010685e-08" iyz="1.550557891201288e-09" ixz="8.990944812895838e-11" />
+        </inertial>
+        <visual name="Finger_p1_index_visual">
+            <origin xyz="0.00259841827019094 -9.07349670249591e-05 0.0" rpy="-1.5707963267948966 0.0 -1.6057029118347823" />
+            <geometry>
+                <mesh filename="meshes/Finger_part_1.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+        </visual>
+        <collision name="Finger_p1_index_collision">
+            <origin xyz="0.00259841827019094 -9.07349670249591e-05 0.0" rpy="-1.5707963267948966 0.0 -1.6057029118347823" />
+            <geometry>
+                <mesh filename="meshes/Finger_part_1.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="Finger_p2_index">
+        <inertial>
+            <origin xyz="-0.0042367954189414655 0.019851851266100767 -0.00012667433530598294" rpy="0.0 0.0 0.0" />
+            <mass value="0.005200153834032561" />
+            <inertia ixx="6.95012773813277e-07" iyy="1.275815062873827e-07" izz="7.375672975454776e-07" ixy="-1.998822213108054e-08" iyz="-1.4901368128835773e-08" ixz="-5.386515895192152e-10" />
+        </inertial>
+        <visual name="Finger_p2_index_visual">
+            <origin xyz="-0.004922001861709034 0.00017187811373885255 0.0" rpy="-1.5707963267948966 0.0 -1.605702911834783" />
+            <geometry>
+                <mesh filename="meshes/Finger_part_2.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+        </visual>
+        <collision name="Finger_p2_index_collision">
+            <origin xyz="-0.004922001861709034 0.00017187811373885255 0.0" rpy="-1.5707963267948966 0.0 -1.605702911834783" />
+            <geometry>
+                <mesh filename="meshes/Finger_part_2.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+        </collision>
+    </link>
+
+
+    <!-- Finger tip frame (dummy link + fixed joint) -->
+    <link name="Finger_tip_index">
+        <origin xyz="0 0 0" rpy="0 -0 0"/>
+        <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <mass value="1e-9"/>
+            <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+        </inertial>
+    </link>
+
+    <joint name="index_tip_fp2_joint" type="fixed">
+        <origin xyz="0 0.0379 0.0048517" rpy="0 0 0"/>
+        <parent link="Finger_p2_index"/>
+        <child link="Finger_p2_index_tip"/>
+        <axis xyz="0 0 0"/>
+    </joint>
+    
+
+    <!-- Thumb tip frame (dummy link + fixed joint) -->
+    <link name="Finger_tip_thumb">
+        <origin xyz="0 0 0" rpy="0 -0 0"/>
+        <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <mass value="1e-9"/>
+            <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+        </inertial>
+    </link>
+
+    <joint name="thumb_tip_joint" type="fixed">
+        <origin xyz="0.0339792 0.0383994 0.00312554" rpy="0 0 0"/>
+        <parent link="Finger_thumb_part_oneUnit"/>
+        <child link="Thumb_index_tip"/>
+        <axis xyz="0 0 0"/>
+    </joint>
+    
+
+
+    <!-- ==================== MIDDLE FINGER ==================== -->
+    <link name="Finger_Base_middle">
+        <inertial>
+            <origin xyz="-3.4524624801102187e-06 0.0047367759997035816 0.009057005624177314" rpy="0.0 0.0 0.0" />
+            <mass value="0.007976429781331111" />
+            <inertia ixx="3.1528516836045123e-06" iyy="3.224766131102679e-06" izz="4.6548169143744784e-07" ixy="-1.9241306047420377e-10" iyz="2.2306662554482598e-08" ixz="-1.214013585535236e-10" />
+        </inertial>
+        <visual name="Finger_Base_middle_visual">
+            <origin xyz="0.0025000000000000057 0.005500000000000025 0.02870000000000001" rpy="0.0 1.5707963267948963 0.0" />
+            <geometry>
+                <mesh filename="meshes/Finger_part_Base_special.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+        </visual>
+        <collision name="Finger_Base_middle_collision">
+            <origin xyz="0.0025000000000000057 0.005500000000000025 0.02870000000000001" rpy="0.0 1.5707963267948963 0.0" />
+            <geometry>
+                <mesh filename="meshes/Finger_part_Base_special.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="Finger_p1_middle">
+        <inertial>
+            <origin xyz="0.0026024841795943567 0.01770220270457668 -0.00033854591421677796" rpy="0.0 0.0 0.0" />
+            <mass value="0.007285673416598265" />
+            <inertia ixx="1.1968266595821704e-06" iyy="2.3097364747228038e-07" izz="1.1591213139311435e-06" ixy="-2.7989935089594914e-10" iyz="1.5527511277168296e-09" ixz="3.5740987711088455e-11" />
+        </inertial>
+        <visual name="Finger_p1_middle_visual">
+            <origin xyz="0.002600000000000009 0.0 0.0" rpy="-1.5707963267948966 0.0 -1.570796326794897" />
+            <geometry>
+                <mesh filename="meshes/Finger_part_1.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+        </visual>
+        <collision name="Finger_p1_middle_collision">
+            <origin xyz="0.002600000000000009 0.0 0.0" rpy="-1.5707963267948966 0.0 -1.570796326794897" />
+            <geometry>
+                <mesh filename="meshes/Finger_part_1.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="Finger_p2_middle">
+        <inertial>
+            <origin xyz="-0.004927032124619818 0.019691898004442408 -0.0001266743353059774" rpy="0.0 0.0 0.0" />
+            <mass value="0.005200153834032561" />
+            <inertia ixx="6.957159646811973e-07" iyy="1.26878315419452e-07" izz="7.375672975454907e-07" ixy="-1.4852966919114938e-10" iyz="-1.491108928736519e-08" ixz="-1.8273209649500217e-11" />
+        </inertial>
+        <visual name="Finger_p2_middle_visual">
+            <origin xyz="-0.004924999999999956 0.0 0.0" rpy="-1.5707963267948966 0.0 -1.570796326794897" />
+            <geometry>
+                <mesh filename="meshes/Finger_part_2.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+        </visual>
+        <collision name="Finger_p2_middle_collision">
+            <origin xyz="-0.004924999999999956 0.0 0.0" rpy="-1.5707963267948966 0.0 -1.570796326794897" />
+            <geometry>
+                <mesh filename="meshes/Finger_part_2.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+        </collision>
+    </link>
+
+    <!-- ==================== RING FINGER ==================== -->
+    <link name="Finger_Base_ring">
+        <inertial>
+            <origin xyz="-3.447745693931914e-06 0.004736775999703553 0.009057003957394451" rpy="0.0 0.0 0.0" />
+            <mass value="0.007976429781331111" />
+            <inertia ixx="3.152851683604534e-06" iyy="3.2247661311026825e-06" izz="4.654816914374473e-07" ixy="-1.9241306047448767e-10" iyz="2.230666255448236e-08" ixz="-1.214013585536692e-10" />
+        </inertial>
+        <visual name="Finger_Base_ring_visual">
+            <origin xyz="0.002500004716786184 0.005499999999999996 0.02869999833321714" rpy="0.0 1.5707963267948966 0.0" />
+            <geometry>
+                <mesh filename="meshes/Finger_part_Base_special.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+        </visual>
+        <collision name="Finger_Base_ring_collision">
+            <origin xyz="0.002500004716786184 0.005499999999999996 0.02869999833321714" rpy="0.0 1.5707963267948966 0.0" />
+            <geometry>
+                <mesh filename="meshes/Finger_part_Base_special.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="Finger_p1_ring">
+        <inertial>
+            <origin xyz="0.0019831039181047983 0.017782240931898157 -0.00033854591421675156" rpy="0.0 0.0 0.0" />
+            <mass value="0.007285673416598265" />
+            <inertia ixx="1.1956697996769425e-06" iyy="2.32130507377507e-07" izz="1.1591213139311435e-06" ixy="3.340803260981702e-08" iyz="1.5530525761661747e-09" ixz="-1.847101759386212e-11" />
+        </inertial>
+        <visual name="Finger_p1_ring_visual">
+            <origin xyz="0.002598419216720931 9.073523429403707e-05 0.0" rpy="-1.5707963267948966 0.0 -1.5358897417550097" />
+            <geometry>
+                <mesh filename="meshes/Finger_part_1.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+        </visual>
+        <collision name="Finger_p1_ring_collision">
+            <origin xyz="0.002598419216720931 9.073523429403707e-05 0.0" rpy="-1.5707963267948966 0.0 -1.5358897417550097" />
+            <geometry>
+                <mesh filename="meshes/Finger_part_1.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="Finger_p2_ring">
+        <inertial>
+            <origin xyz="-0.005611268867555594 0.01950794962716687 -0.00012667433530595906" rpy="0.0 0.0 0.0" />
+            <mass value="0.005200153834032561" />
+            <inertia ixx="6.950334956252113e-07" iyy="1.2756078447544414e-07" izz="7.375672975454907e-07" ixy="1.9691886414318965e-08" iyz="-1.4902643580475715e-08" ixz="5.021274333117455e-10" />
+        </inertial>
+        <visual name="Finger_p2_ring_visual">
+            <origin xyz="-0.004922000651379102 -0.000171881684942079 0.0" rpy="-1.5707963267948966 0.0 -1.5358897417550097" />
+            <geometry>
+                <mesh filename="meshes/Finger_part_2.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+        </visual>
+        <collision name="Finger_p2_ring_collision">
+            <origin xyz="-0.004922000651379102 -0.000171881684942079 0.0" rpy="-1.5707963267948966 0.0 -1.5358897417550097" />
+            <geometry>
+                <mesh filename="meshes/Finger_part_2.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+        </collision>
+    </link>
+
+    <!-- ==================== PINKY FINGER ==================== -->
+    <link name="Finger_Base_pinky">
+        <inertial>
+            <origin xyz="-3.447936721618916e-06 0.004736775999703563 0.00905700853866966" rpy="0.0 0.0 0.0" />
+            <mass value="0.007976429781331111" />
+            <inertia ixx="3.1528516836045055e-06" iyy="3.2247661311026927e-06" izz="4.654816914374473e-07" ixy="-1.9241306047642496e-10" iyz="2.2306662554482548e-08" ixz="-1.2140135855246482e-10" />
+        </inertial>
+        <visual name="Finger_Base_pinky_visual">
+            <origin xyz="0.002500004525758479 0.0055000000000000075 0.028700002914492356" rpy="0.0 1.5707963267948966 0.0" />
+            <geometry>
+                <mesh filename="meshes/Finger_part_Base_special.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+        </visual>
+        <collision name="Finger_Base_pinky_collision">
+            <origin xyz="0.002500004525758479 0.0055000000000000075 0.028700002914492356" rpy="0.0 1.5707963267948966 0.0" />
+            <geometry>
+                <mesh filename="meshes/Finger_part_Base_special.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="Finger_p1_pinky">
+        <inertial>
+            <origin xyz="0.0013612984050555622 0.01784062578165729 -0.00033854591421676294" rpy="0.0 0.0 0.0" />
+            <mass value="0.007285673416598265" />
+            <inertia ixx="1.1921658064830028e-06" iyy="2.356345005714619e-07" izz="1.1591213139311435e-06" ixy="6.693320399382588e-08" iyz="1.5514618692816613e-09" ixz="-7.266051881057905e-11" />
+        </inertial>
+        <visual name="Finger_p1_pinky_visual">
+            <origin xyz="0.002593663514972855 0.0001813714655507148 0.0" rpy="-1.5707963267948966 0.0 -1.500983156715123" />
+            <geometry>
+                <mesh filename="meshes/Finger_part_1.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+        </visual>
+        <collision name="Finger_p1_pinky_collision">
+            <origin xyz="0.002593663514972855 0.0001813714655507148 0.0" rpy="-1.5707963267948966 0.0 -1.500983156715123" />
+            <geometry>
+                <mesh filename="meshes/Finger_part_1.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="Finger_p2_pinky">
+        <inertial>
+            <origin xyz="-0.00628866997537747 0.019300241252710997 -0.00012667433530596907" rpy="0.0 0.0 0.0" />
+            <mass value="0.005200153834032561" />
+            <inertia ixx="6.929686915659527e-07" iyy="1.2962558853471714e-07" izz="7.375672975455178e-07" ixy="3.943636560663365e-08" iyz="-1.4876041297959374e-08" ixz="1.0219163113406778e-09" />
+        </inertial>
+        <visual name="Finger_p2_pinky_visual">
+            <origin xyz="-0.004913005434792153 -0.0003435465240562507 0.0" rpy="-1.5707963267948966 0.0 -1.500983156715123" />
+            <geometry>
+                <mesh filename="meshes/Finger_part_2.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+        </visual>
+        <collision name="Finger_p2_pinky_collision">
+            <origin xyz="-0.004913005434792153 -0.0003435465240562507 0.0" rpy="-1.5707963267948966 0.0 -1.500983156715123" />
+            <geometry>
+                <mesh filename="meshes/Finger_part_2.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+        </collision>
+    </link>
+
+    <!-- ==================== THUMB ==================== -->
+    <link name="ThumbRotatorBase_part_Comb_v3">
+        <inertial>
+            <origin xyz="0.008857068907936942 0.0011100386451895073 0.0032361341756280237" rpy="0.0 0.0 0.0" />
+            <mass value="0.003939892277332412" />
+            <inertia ixx="3.349900513314987e-07" iyy="6.092763944646107e-07" izz="3.8845794497999793e-07" ixy="-7.549476484084391e-08" iyz="6.550947699999525e-09" ixz="2.049442098339085e-07" />
+        </inertial>
+        <visual name="ThumbRotatorBase_part_Comb_v3_visual">
+            <origin xyz="-0.0024999995022968085 -0.0025000000000000005 -0.004999998423136171" rpy="-1.5707963267948966 0.0 0.0" />
+            <geometry>
+                <mesh filename="meshes/ThumbRotatorBase_part_Comb_v3.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+        </visual>
+        <collision name="ThumbRotatorBase_part_Comb_v3_collision">
+            <origin xyz="-0.0024999995022968085 -0.0025000000000000005 -0.004999998423136171" rpy="-1.5707963267948966 0.0 0.0" />
+            <geometry>
+                <mesh filename="meshes/ThumbRotatorBase_part_Comb_v3.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="Thumb_part_Base">
+        <inertial>
+            <origin xyz="0.040274279625243936 -0.0085034597108057 0.004157010101590808" rpy="0.0 0.0 0.0" />
+            <mass value="0.007966053114155389" />
+            <inertia ixx="4.5761189676861975e-07" iyy="3.130849058152359e-06" izz="3.2155076616504668e-06" ixy="-1.191216291525993e-10" iyz="-1.764485621369342e-10" ixz="6.522139098786812e-08" />
+        </inertial>
+        <visual name="Thumb_part_Base_visual">
+            <origin xyz="0.05999999774749611 -0.0060000026682638105 0.004499996117069387" rpy="1.570796326794897 0.0 -3.1415926535897927" />
+            <geometry>
+                <mesh filename="meshes/Thumb_part_Base.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+        </visual>
+        <collision name="Thumb_part_Base_collision">
+            <origin xyz="0.05999999774749611 -0.0060000026682638105 0.004499996117069387" rpy="1.570796326794897 0.0 -3.1415926535897927" />
+            <geometry>
+                <mesh filename="meshes/Thumb_part_Base.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="Finger_thumb_part_oneUnit">
+        <inertial>
+            <origin xyz="0.018257346658900407 0.015383343605187543 0.0015740624905692699" rpy="0.0 0.0 0.0" />
+            <mass value="0.009434527038695552" />
+            <inertia ixx="1.415100046698336e-06" iyy="1.3918459017826965e-06" izz="2.536556530868784e-06" ixy="-1.1330840177672352e-06" iyz="-1.8604949123538386e-08" ixz="2.1593190988870182e-09" />
+        </inertial>
+        <visual name="Finger_thumb_part_oneUnit_visual">
+            <origin xyz="0.001275002002834853 -0.0012750014459707183 0.0018031227034740718" rpy="-0.7853981633974491 0.0 -2.3561944901923453" />
+            <geometry>
+                <mesh filename="meshes/Finger_thumb_part_oneUnit.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+        </visual>
+        <collision name="Finger_thumb_part_oneUnit_collision">
+            <origin xyz="0.001275002002834853 -0.0012750014459707183 0.0018031227034740718" rpy="-0.7853981633974491 0.0 -2.3561944901923453" />
+            <geometry>
+                <mesh filename="meshes/Finger_thumb_part_oneUnit.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+        </collision>
+    </link>
+
+    <!-- ==================== JOINTS ==================== -->
+
+    <!-- Mount chain: base plate -> mount connector -> palm -->
+    <joint name="constrain_connector_to_base_link" type="fixed">
+        <origin xyz="-0.02180131127702619 -0.0677686542039223 0.005230248977509285" rpy="-1.5707963267948968 0.0 0.0" />
+        <parent link="Hand_Mount_plate_v2" />
+        <child link="Hand_Mount_p1" />
+    </joint>
+
+    <joint name="constrain_palm_to_connector" type="fixed">
+        <origin xyz="-0.0007876899999999965 0.0045000000000000005 0.034174869999999996" rpy="-1.5707963267948966 0.0 -3.141592653589793" />
+        <parent link="Hand_Mount_p1" />
+        <child link="Hand_Palm_2" />
+    </joint>
+
+    <!-- Palm fixed joints -->
+    <joint name="constrain_palm3_to_palm2" type="fixed">
+        <origin xyz="-0.0019999999999999974 0.007499999999999995 0.018500000000000003" rpy="0.0 0.0 3.141592653589793" />
+        <parent link="Hand_Palm_2" />
+        <child link="Hand_Palm_3" />
+    </joint>
+
+    <joint name="constrain_palmlock_to_palm2" type="fixed">
+        <origin xyz="0.02321702 0.004783729999999986 0.014500000000000002" rpy="-1.5707963267948966 0.0 0.0" />
+        <parent link="Hand_Palm_2" />
+        <child link="Hand_Palm_3_lock" />
+    </joint>
+
+    <!-- Index finger joints -->
+    <joint name="constrain_index_to_palm2" type="fixed">
+        <origin xyz="-0.026847530000000026 -0.06296849 0.004" rpy="-1.5707963267948966 0.0 3.1066860685499065" />
+        <parent link="Hand_Palm_2" />
+        <child link="Finger_Base_index" />
+    </joint>
+
+    <joint name="index_fp1_fpb_link" type="revolute">
+        <origin xyz="-0.0025999992160793284 0.0055000000000000005 0.02869999459719263" rpy="1.5707963267948966 -0.03490658503988656 0.0" />
+        <parent link="Finger_Base_index" />
+        <child link="Finger_p1_index" />
+        <axis xyz="0.999391 -0.034899 0.0" />
+        <limit lower="0.0" upper="1.570796" effort="1000000" velocity="1000000" />
+    </joint>
+
+    <joint name="index_fp2_fp1_link" type="revolute">
+        <origin xyz="0.0089164 0.039713019999999995 0.0" rpy="0.0 0.0 0.0" />
+        <parent link="Finger_p1_index" />
+        <child link="Finger_p2_index" />
+        <axis xyz="0.9993910000000003 -0.034899 0.0" />
+        <limit lower="0.0" upper="1.919862" effort="1000000" velocity="1000000" />
+        <mimic joint="index_fp1_fpb_link" multiplier="1.222222" offset="0.0"/>
+    </joint>
+
+    <!-- Middle finger joints -->
+    <joint name="constrain_middle_to_palm2" type="fixed">
+        <origin xyz="-0.007855240000000025 -0.0633 0.004" rpy="-1.5707963267948966 0.0 3.1415926535897927" />
+        <parent link="Hand_Palm_2" />
+        <child link="Finger_Base_middle" />
+    </joint>
+
+    <joint name="middle_fp1_fpb_link" type="revolute">
+        <origin xyz="-0.002600000000000001 0.0055000000000000005 0.028700000000000003" rpy="1.5707963267948966 0.0 0.0" />
+        <parent link="Finger_Base_middle" />
+        <child link="Finger_p1_middle" />
+        <axis xyz="1.0 0.0 0.0" />
+        <limit lower="0.0" upper="1.570796" effort="1000000" velocity="1000000" />
+    </joint>
+
+    <joint name="middle_fp2_fp1_link" type="revolute">
+        <origin xyz="0.007525000000000002 0.04 0.0" rpy="0.0 0.0 0.0" />
+        <parent link="Finger_p1_middle" />
+        <child link="Finger_p2_middle" />
+        <axis xyz="1.0 0.0 0.0" />
+        <limit lower="0.0" upper="1.919862" effort="1000000" velocity="1000000" />
+        <mimic joint="middle_fp1_fpb_link" multiplier="1.222222" offset="0.0"/>
+    </joint>
+
+    <!-- Ring finger joints -->
+    <joint name="constrain_ring_to_palm2" type="fixed">
+        <origin xyz="0.01113656999999998 -0.05828753000000001 0.008321" rpy="-1.5707963267948966 0.0 -3.106686068549907" />
+        <parent link="Hand_Palm_2" />
+        <child link="Finger_Base_ring" />
+    </joint>
+
+    <joint name="ring_fp1_fpb_link" type="revolute">
+        <origin xyz="-0.0025999982271649237 0.0055000000000000005 0.02870000189526194" rpy="1.5707963267948966 0.03490658503988656 0.0" />
+        <parent link="Finger_Base_ring" />
+        <child link="Finger_p1_ring" />
+        <axis xyz="0.999391 0.034899 0.0" />
+        <limit lower="0.0" upper="1.570796" effort="1000000" velocity="1000000" />
+    </joint>
+
+    <joint name="ring_fp2_fp1_link" type="revolute">
+        <origin xyz="0.00612444 0.04023825 0.0" rpy="0.0 0.0 0.0" />
+        <parent link="Finger_p1_ring" />
+        <child link="Finger_p2_ring" />
+        <axis xyz="0.999391 0.034899 0.0" />
+        <limit lower="0.0" upper="1.919862" effort="1000000" velocity="1000000" />
+        <mimic joint="ring_fp1_fpb_link" multiplier="1.222222" offset="0.0"/>
+    </joint>
+
+    <!-- Pinky finger joints -->
+    <joint name="constrain_pinky_to_palm2" type="fixed">
+        <origin xyz="0.029921109999999976 -0.05203295000000002 0.013999999999999999" rpy="-1.5707963267948966 0.0 -3.0717794835100203" />
+        <parent link="Hand_Palm_2" />
+        <child link="Finger_Base_pinky" />
+    </joint>
+
+    <joint name="pinky_fp1_fpb_link" type="revolute">
+        <origin xyz="-0.0025999927891235865 0.0055000000000000005 0.028699998081599336" rpy="1.5707963267948966 0.06981317007977328 0.0" />
+        <parent link="Finger_Base_pinky" />
+        <child link="Finger_p1_pinky" />
+        <axis xyz="0.997564 0.069756 0.0" />
+        <limit lower="0.0" upper="1.570796" effort="1000000" velocity="1000000" />
+    </joint>
+
+    <joint name="pinky_fp2_fp1_link" type="revolute">
+        <origin xyz="0.00471641 0.040427479999999995 0.0" rpy="0.0 0.0 0.0" />
+        <parent link="Finger_p1_pinky" />
+        <child link="Finger_p2_pinky" />
+        <axis xyz="0.997564 0.069756 0.0" />
+        <limit lower="0.0" upper="1.919862" effort="1000000" velocity="1000000" />
+        <mimic joint="pinky_fp1_fpb_link" multiplier="1.222222" offset="0.0"/>
+    </joint>
+
+    <!-- Thumb joints -->
+    <joint name="thumb_palm_swing_link" type="revolute">
+        <origin xyz="-0.023450000000000013 -0.02221627 0.011200000000000002" rpy="1.5707963267948966 0.0 3.1415926535897927" />
+        <parent link="Hand_Palm_2" />
+        <child link="ThumbRotatorBase_part_Comb_v3" />
+        <axis xyz="0.0 0.0 1.0" />
+        <limit lower="0.0" upper="1.570796" effort="1000000" velocity="1000000" />
+    </joint>
+
+    <joint name="constrain_thumbbase_to_swing" type="fixed">
+        <origin xyz="0.0031988600000000013 0.0053032999999999995 0.02428643" rpy="0.7853981633974483 0.7853981633974482 0.0" />
+        <parent link="ThumbRotatorBase_part_Comb_v3" />
+        <child link="Thumb_part_Base" />
+    </joint>
+
+    <joint name="thumb_fp1_fpb_link" type="revolute">
+        <origin xyz="0.0599999973537337 -0.011050004683604498 0.004499994683604487" rpy="-2.5261129449194057 -0.5235987755982986 0.6154797086703874" />
+        <parent link="Thumb_part_Base" />
+        <child link="Finger_thumb_part_oneUnit" />
+        <axis xyz="0.49999999999999994 -0.5000000000000002 0.707107" />
+        <limit lower="0.0" upper="1.570796" effort="1000000" velocity="1000000" />
+    </joint>
+
+</robot>
