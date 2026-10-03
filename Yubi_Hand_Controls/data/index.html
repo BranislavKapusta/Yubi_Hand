@@ -1,0 +1,636 @@
+<!-- ############################################################################################################ -->
+<!-- Disclaimer, this HTML was made with the use of AI (Claude) as I am not front-end dev and I dont code in HTML -->
+<!-- ############################################################################################################ -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESP32 Hand Controller</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --accent-blue: #2563eb;
+            --accent-blue-light: #60a5fa;
+            --accent-blue-dark: #1e40af;
+            --dark-bg: #ffffff;
+            --panel-bg: #ffffff;
+            --panel-border: #2563eb;
+            --text-main: #1e293b;
+            --text-dim: #94a3b8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Share Tech Mono', monospace;
+            background-color: var(--dark-bg);
+            background-image: var(--bg-image, none);
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .app { position: relative; z-index: 1; }
+
+        /* ── PAGES ── */
+        .page { display: none; padding: 12px 16px 20px; }
+        .page.active { display: block; }
+
+        /* ── HEADER ── */
+        .page-header {
+            position: relative;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .page-header h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(16px, 4vw, 22px);
+            font-weight: 900;
+            letter-spacing: 4px;
+            color: var(--accent-blue);
+        }
+
+        .page-header p {
+            font-size: 10px;
+            color: var(--text-dim);
+            letter-spacing: 3px;
+            margin-top: 3px;
+        }
+
+        /* ── PAGE SWITCH BUTTON ── */
+        .page-switch-btn {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 14px;
+            font-weight: 900;
+            width: 38px;
+            height: 38px;
+            background: #ffffff;
+            border: 2px solid var(--accent-blue);
+            color: var(--accent-blue);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .page-switch-btn:active {
+            background: var(--accent-blue);
+            color: #ffffff;
+        }
+
+        /* ── BOTTOM BAR ── */
+        .bottom-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        /* ── MODE TOGGLE BAR ── */
+        .controls-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+
+        .toggle-label {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            transition: all 0.2s;
+        }
+
+        .toggle-label.left  { color: var(--accent-blue-dark); }
+        .toggle-label.right { color: var(--text-dim); }
+        .toggle-label.right.active { color: var(--accent-blue); }
+
+        .toggle {
+            position: relative;
+            width: 52px;
+            height: 26px;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .toggle input { display: none; }
+
+        .toggle-track {
+            position: absolute;
+            inset: 0;
+            background: #ffffff;
+            border: 2px solid var(--accent-blue-dark);
+            transition: all 0.3s;
+        }
+
+        .toggle input:checked + .toggle-track {
+            background: #ffffff;
+            border-color: var(--accent-blue);
+        }
+
+        .toggle-thumb {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 18px;
+            height: 18px;
+            background: var(--accent-blue-dark);
+            transition: all 0.3s;
+        }
+
+        .toggle input:checked ~ .toggle-thumb {
+            left: 29px;
+            background: var(--accent-blue);
+        }
+
+        /* ── SEND ALL ── */
+        .send-all-btn {
+            flex: 1;
+            padding: 13px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            background: #ffffff;
+            border: 2px solid var(--accent-blue);
+            color: var(--accent-blue);
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: all 0.2s;
+        }
+
+        .send-all-btn:active {
+            background: var(--accent-blue);
+            color: #ffffff;
+        }
+
+        .send-all-btn.hidden { display: none; }
+
+        /* ── RESET BUTTON ── */
+        .reset-btn {
+            padding: 13px 14px;
+            font-size: 16px;
+            background: #ffffff;
+            border: 2px solid var(--accent-blue-dark);
+            color: var(--accent-blue-dark);
+            cursor: pointer;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .reset-btn:active {
+            background: var(--accent-blue-dark);
+            color: #ffffff;
+        }
+
+        /* ── SLIDER CANVAS ── */
+        .slider-canvas {
+            position: relative;
+            width: min(340px, 100vw - 32px);
+            aspect-ratio: 400 / 600;
+            margin: 0 auto;
+            border: 2px solid var(--accent-blue);
+            overflow: visible;
+
+            background-image: url('hand_img.jpg');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        /* ── RANGE SLIDERS ── */
+        input[type=range] {
+            -webkit-appearance: none;
+            appearance: none;
+            height: 4px;
+            background: linear-gradient(
+                to right,
+                var(--accent-blue) var(--pct, 0%),
+                #cbd5e1 var(--pct, 0%)
+            );
+            outline: none;
+            cursor: pointer;
+            position: absolute;
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            background: #ffffff;
+            border: 2px solid var(--accent-blue);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        input[type=range]:active::-webkit-slider-thumb {
+            background: var(--accent-blue);
+        }
+
+        /* ── SLIDER VALUE LABEL ── */
+        .slider-val {
+            position: absolute;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 9px;
+            font-weight: 700;
+            color: var(--accent-blue);
+            background: #ffffff;
+            border: 1px solid var(--accent-blue-light);
+            padding: 1px 4px;
+            pointer-events: none;
+            white-space: nowrap;
+            z-index: 10;
+        }
+
+        /* ── POSES PAGE ── */
+        .poses-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .pose-btn {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            padding: 22px 12px;
+            background: #ffffff;
+            border: 2px solid var(--accent-blue-light);
+            color: var(--text-main);
+            cursor: pointer;
+            text-transform: uppercase;
+            text-align: center;
+            transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pose-btn:active {
+            border-color: var(--accent-blue);
+            background: #eff6ff;
+            color: var(--accent-blue);
+        }
+
+        .pose-btn .pose-icon { display: block; font-size: 28px; margin-bottom: 8px; }
+        .pose-btn .pose-label { display: block; }
+        .pose-btn.wide { grid-column: span 2; }
+
+        /* ── JOYSTICK PAD ── */
+        .joystick-pad {
+            background: #ffffff;
+            border: 2px solid var(--accent-blue-light);
+            touch-action: none;
+            cursor: crosshair;
+        }
+
+        /* crosshair lines */
+        .joystick-pad::before,
+        .joystick-pad::after {
+            content: '';
+            position: absolute;
+            background: #dbeafe;
+            pointer-events: none;
+        }
+        .joystick-pad::before { width: 100%; height: 1px; top: 50%; left: 0; }
+        .joystick-pad::after  { width: 1px; height: 100%; left: 50%; top: 0; }
+
+        .joystick-dot {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background: #ffffff;
+            border: 2px solid var(--accent-blue);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            transition: all 0.1s;
+            left: 50%;
+            top: 50%;
+        }
+
+        /* ── FLASH ── */
+        .flash {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(60px);
+            background: #ffffff;
+            border: 2px solid var(--accent-blue);
+            color: var(--accent-blue);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 10px;
+            letter-spacing: 2px;
+            padding: 10px 20px;
+            transition: transform 0.3s;
+            pointer-events: none;
+            z-index: 999;
+        }
+        .flash.show { transform: translateX(-50%) translateY(0); }
+    </style>
+</head>
+<body>
+<div class="app">
+
+    <!-- ══ MAIN PAGE ══ -->
+    <div id="page-main" class="page active">
+
+        <div class="page-header">
+            <h1>HAND CONTROL</h1>
+            <p>--< SERVO POSITION INTERFACE >--</p>
+            <button class="page-switch-btn" onclick="showPage('poses')">P</button>
+        </div>
+
+        <!-- Slider canvas — adjust width/height to fit your background image -->
+        <div class="slider-canvas">
+
+            <!-- Index finger — IDX:0 -->
+            <input type="range" min="0" max="90" value="0"
+                id="slider-0" oninput="onSlider(0,this)"
+                style="left:60%; top:8%; width:53%; transform-origin:0% 50%; transform:rotate(93deg);">
+            <span class="slider-val" id="val-0" style="left:60%; top:5%;">0°</span>
+
+            <!-- Middle finger — IDX:1 -->
+            <input type="range" min="0" max="90" value="0"
+                id="slider-1" oninput="onSlider(1,this)"
+                style="left:45%; top:5%; width:54%; transform-origin:0% 50%; transform:rotate(90deg);">
+            <span class="slider-val" id="val-1" style="left:45%; top:2%;">0°</span>
+
+            <!-- Ring finger — IDX:2 -->
+            <input type="range" min="0" max="90" value="0"
+                id="slider-2" oninput="onSlider(2,this)"
+                style="left:30%; top:8%; width:50%; transform-origin:0% 50%; transform:rotate(87deg);">
+            <span class="slider-val" id="val-2" style="left:30%; top:5%;">0°</span>
+
+            <!-- Pinky finger — IDX:3 -->
+            <input type="range" min="0" max="90" value="0"
+                id="slider-3" oninput="onSlider(3,this)"
+                style="left:15%; top:18%; width:40%; transform-origin:0% 50%; transform:rotate(85deg);">
+            <span class="slider-val" id="val-3" style="left:15%; top:15%;">0°</span>
+
+            <!-- Thumb — IDX:4 -->
+            <input type="range" min="0" max="90" value="0"
+                id="slider-4" oninput="onSlider(4,this)"
+                style="left:90%; top:30%; width:40%; transform-origin:0% 50%; transform:rotate(110deg);">
+            <span class="slider-val" id="val-4" style="left:78%; top:27%;">0°</span>
+
+            <!-- Thumb rotation — IDX:5 -->
+            <input type="range" min="0" max="90" value="0"
+                id="slider-5" oninput="onSlider(5,this)"
+                style="left:75%; top:60%; width:40%; transform-origin:0% 50%; transform:rotate(180deg);">
+            <span class="slider-val" id="val-5" style="left:75%; top:57%;">0°</span>
+
+            <!-- Wrist 1 — IDX:6 (controlled by joystick X) -->
+            <input type="range" min="45" max="135" value="90"
+                id="slider-6" oninput="onSlider(6,this)"
+                style="display:none;">
+
+            <!-- Wrist 2 — IDX:7 (controlled by joystick Y) -->
+            <input type="range" min="45" max="135" value="90"
+                id="slider-7" oninput="onSlider(7,this)"
+                style="display:none;">
+
+            <!-- Wrist joystick — positioned where wrist sliders were -->
+            <div class="joystick-pad" id="joystick-pad"
+                style="position:absolute; left:20%; top:68%; width:45%; aspect-ratio:1/1;">
+                <div class="joystick-dot" id="joystick-dot"></div>
+            </div>
+
+        </div>
+
+        <!-- Bottom bar: toggle left, send button right -->
+        <div class="bottom-bar">
+            <div class="controls-bar">
+                <span class="toggle-label left" id="label-manual">MANUAL</span>
+                <label class="toggle">
+                    <input type="checkbox" id="mode-toggle" onchange="toggleMode()">
+                    <div class="toggle-track"></div>
+                    <div class="toggle-thumb"></div>
+                </label>
+                <span class="toggle-label right" id="label-live">LIVE</span>
+            </div>
+            <button class="reset-btn" onclick="resetSliders()">↺</button>
+            <button class="send-all-btn" id="send-all-btn" onclick="sendAll()">
+                ▶ SEND ALL
+            </button>
+        </div>
+
+    </div>
+
+    <!-- ══ POSES PAGE ══ -->
+    <div id="page-poses" class="page">
+        <div class="page-header">
+            <h1>POSE PRESETS</h1>
+            <p>--< POSITION COMMANDS >--</p>
+            <button class="page-switch-btn" onclick="showPage('main')">C</button>
+        </div>
+
+        <div class="poses-grid">
+            <button class="pose-btn wide" onclick="sendPose('open')">
+                <span class="pose-icon">🖐</span>
+                <span class="pose-label">OPEN HAND</span>
+            </button>
+            <button class="pose-btn wide" onclick="sendPose('fist')">
+                <span class="pose-icon">✊</span>
+                <span class="pose-label">FIST</span>
+            </button>
+            <button class="pose-btn" onclick="sendPose('pinch')">
+                <span class="pose-icon">🤌</span>
+                <span class="pose-label">PINCH</span>
+            </button>
+            <button class="pose-btn" onclick="sendPose('3pinch')">
+                <span class="pose-icon">✌️</span>
+                <span class="pose-label">PINCH 3</span>
+            </button>
+            <button class="pose-btn wide" onclick="sendPose('cilinder')">
+                <span class="pose-icon">🫳</span>
+                <span class="pose-label">CILINDER</span>
+            </button>
+            <button class="pose-btn wide" onclick="sendPose('small_cilinder')">
+                <span class="pose-icon">🫳</span>
+                <span class="pose-label">SMALL CILINDER</span>
+            </button>
+            <button class="pose-btn wide" onclick="sendPose('relax')">
+                <span class="pose-icon">🤙</span>
+                <span class="pose-label">RELAX</span>
+            </button>
+        </div>
+    </div>
+
+</div>
+
+<div class="flash" id="flash"></div>
+
+<script>
+    // ── STATE ─────────────────────────────────────────
+    let liveMode = false;
+
+    // ── PAGE SWITCHING ────────────────────────────────
+    function showPage(id) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById('page-' + id).classList.add('active');
+    }
+
+    // ── MODE TOGGLE ───────────────────────────────────
+    function toggleMode() {
+        liveMode = document.getElementById('mode-toggle').checked;
+        const sendBtn = document.getElementById('send-all-btn');
+        const labelManual = document.getElementById('label-manual');
+        const labelLive = document.getElementById('label-live');
+        if (liveMode) {
+            sendBtn.classList.add('hidden');
+            labelManual.classList.remove('left');
+            labelManual.style.color = 'var(--text-dim)';
+            labelLive.classList.add('active');
+        } else {
+            sendBtn.classList.remove('hidden');
+            labelManual.style.color = '';
+            labelLive.classList.remove('active');
+        }
+    }
+
+    // ── SLIDER HANDLER ────────────────────────────────
+    let debounceTimer;
+    function onSlider(index, el) {
+        const val = parseInt(el.value);
+        const min = parseInt(el.min);
+        const max = parseInt(el.max);
+        const pct = ((val - min) / (max - min) * 100).toFixed(1) + '%';
+        el.style.setProperty('--pct', pct);
+        // Update value label
+        document.getElementById('val-' + index).textContent = val + '°';
+        if (liveMode) {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => sendSingle(index, val), 80);
+        }
+    }
+
+    // ── JOYSTICK ──────────────────────────────────────
+    (function() {
+        const pad = document.getElementById('joystick-pad');
+        const dot = document.getElementById('joystick-dot');
+        const W6_MIN = 45, W6_MAX = 135;
+        const W7_MIN = 45, W7_MAX = 135;
+        let active = false;
+
+        function updateFromEvent(e) {
+            const rect = pad.getBoundingClientRect();
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+            // clamp to pad bounds
+            const x = Math.max(0, Math.min(rect.width,  clientX - rect.left));
+            const y = Math.max(0, Math.min(rect.height, clientY - rect.top));
+
+            // position dot
+            dot.style.left = (x / rect.width  * 100) + '%';
+            dot.style.top  = (y / rect.height * 100) + '%';
+
+            // map to wrist values
+            const val6 = Math.round(W6_MIN + (x / rect.width)  * (W6_MAX - W6_MIN));
+            const val7 = Math.round(W7_MIN + (y / rect.height) * (W7_MAX - W7_MIN));
+
+            // update hidden sliders
+            document.getElementById('slider-6').value = val6;
+            document.getElementById('slider-7').value = val7;
+
+            // update labels only if they exist
+            const l6 = document.getElementById('val-6');
+            const l7 = document.getElementById('val-7');
+            if (l6) l6.textContent = val6 + '°';
+            if (l7) l7.textContent = val7 + '°';
+
+            // send if live mode
+            if (liveMode) {
+                clearTimeout(debounceTimer);
+                debounceTimer = setTimeout(() => {
+                    sendSingle(6, val6);
+                    sendSingle(7, val7);
+                }, 80);
+            }
+        }
+
+        pad.addEventListener('mousedown',  e => { active = true; updateFromEvent(e); });
+        pad.addEventListener('touchstart', e => { active = true; updateFromEvent(e); e.preventDefault(); }, { passive: false });
+        window.addEventListener('mousemove',  e => { if (active) updateFromEvent(e); });
+        window.addEventListener('touchmove',  e => { if (active) { updateFromEvent(e); e.preventDefault(); } }, { passive: false });
+        window.addEventListener('mouseup',   () => active = false);
+        window.addEventListener('touchend',  () => active = false);
+    })();
+
+    // ── RESET SLIDERS ─────────────────────────────────
+    function resetSliders() {
+        const defaults = [0, 0, 0, 0, 0, 0, 90, 90];
+        defaults.forEach((def, i) => {
+            const slider = document.getElementById('slider-' + i);
+            if (!slider) return;
+            const min = parseInt(slider.min);
+            const max = parseInt(slider.max);
+            slider.value = def;
+            const pct = ((def - min) / (max - min) * 100).toFixed(1) + '%';
+            slider.style.setProperty('--pct', pct);
+            const label = document.getElementById('val-' + i);
+            if (label) label.textContent = def + '°';
+        });
+        // reset joystick dot to center
+        document.getElementById('joystick-dot').style.left = '50%';
+        document.getElementById('joystick-dot').style.top  = '50%';
+        showFlash('RESET');
+    }
+
+    // ── SEND SINGLE ───────────────────────────────────
+    function sendSingle(index, val) {
+        fetch('/setsingle?index=' + index + '&val=' + val)
+            .catch(err => console.error(err));
+    }
+
+    // ── SEND ALL ──────────────────────────────────────
+    function sendAll() {
+        const values = [];
+        for (let i = 0; i < 8; i++) {
+            values.push(parseInt(document.getElementById('slider-' + i).value));
+        }
+        const query = values.map((v, i) => 'v' + i + '=' + v).join('&');
+        fetch('/setmulty?' + query).catch(err => console.error(err));
+        showFlash('SENT');
+    }
+
+    // ── SEND POSE ─────────────────────────────────────
+    function sendPose(name) {
+        fetch('/pose?name=' + name).catch(err => console.error(err));
+        showFlash(name.toUpperCase() + ' POSE SENT');
+    }
+
+    // ── FLASH ─────────────────────────────────────────
+    let flashTimer;
+    function showFlash(msg) {
+        const el = document.getElementById('flash');
+        el.textContent = msg;
+        el.classList.add('show');
+        clearTimeout(flashTimer);
+        flashTimer = setTimeout(() => el.classList.remove('show'), 1500);
+    }
+
+    // ── INIT SLIDER FILLS ─────────────────────────────
+    document.querySelectorAll('input[type=range]').forEach(el => {
+        const min = parseInt(el.min);
+        const max = parseInt(el.max);
+        const val = parseInt(el.value);
+        const pct = ((val - min) / (max - min) * 100).toFixed(1) + '%';
+        el.style.setProperty('--pct', pct);
+    });
+</script>
+</body>
+</html>
