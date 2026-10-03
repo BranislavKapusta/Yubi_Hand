@@ -1,2 +1,2 @@
-# Yubi_Hand
+# Yubi Hand
 
