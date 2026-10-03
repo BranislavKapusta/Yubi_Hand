@@ -1,4 +1,4 @@
-# Hand_Control_ESP32
+# Yubi_Hand_Controls_ESP32
 
 This is control program for Yubi Hand project (prosthetic hand)
 
