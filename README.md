@@ -1,4 +1,4 @@
-# Yubi Hand
+# Yūbi Hand
 > [!NOTE]
 > Hand description
 
