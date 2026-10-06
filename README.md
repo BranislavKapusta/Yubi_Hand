@@ -2,9 +2,9 @@
 > [!NOTE]
 > Hand description
 
-<img width="300" alt="_DSC2452" src="https://github.com/user-attachments/assets/de925a20-921b-482e-b672-26fe52523cd5" />
-<img width="300" alt="_DSC2464" src="https://github.com/user-attachments/assets/268b1985-2687-4c50-8729-d57e2625454f" />
-<img width="300" alt="_DSC2468" src="https://github.com/user-attachments/assets/975b1d03-ae8d-48b5-932a-2a1e7fe04915" />
+<img width="270" alt="_DSC2452" src="https://github.com/user-attachments/assets/de925a20-921b-482e-b672-26fe52523cd5" />
+<img width="270" alt="_DSC2464" src="https://github.com/user-attachments/assets/268b1985-2687-4c50-8729-d57e2625454f" />
+<img width="270" alt="_DSC2468" src="https://github.com/user-attachments/assets/975b1d03-ae8d-48b5-932a-2a1e7fe04915" />
 
 
 
