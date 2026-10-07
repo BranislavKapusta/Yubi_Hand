@@ -1,4 +1,4 @@
-# Yūbi Hand
+# Yūbi Hand　「ゆうびて」
 > [!NOTE]
 > Hand description
 
