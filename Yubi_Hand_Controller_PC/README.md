@@ -1,4 +1,7 @@
-# Yubi_Hand_Controls_ESP32
+# Yūbi Hand Control with PC via Bluetooth
+> [!WARNING]
+> This is not currently describing the Controller but only the type of communication
+
 
 This is control program for Yubi Hand project (prosthetic hand)
 
