@@ -16,11 +16,11 @@
 #include "led_indicators.h"
 #include "control.h"
 
-#include "orientation_sensor.h"
-#include "FastIMU.h"
+//#include "orientation_sensor.h"
+//#include "FastIMU.h"
 
-MPU6500 IMU1;
-calData calib1 = { 0 };
+//MPU6500 IMU1;
+//calData calib1 = { 0 };
 
 
 void setup() {
@@ -38,7 +38,7 @@ void setup() {
 
     init_fingers_wrist();
 
-    init_orientation_sensor();
+    //init_orientation_sensor();
 
 }
 
@@ -49,7 +49,7 @@ void loop() {
     check_bluetooth_communication();
     
     // Sensors
-    orientation_sensor_update();
+    //orientation_sensor_update();
 
     // Motor control
     control_movement();

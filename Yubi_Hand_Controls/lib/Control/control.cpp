@@ -44,7 +44,7 @@ void control_movement(){
     //Check and set new pos by commands
     commands();
 
-    auto_leveling_wrist();
+    //auto_leveling_wrist();
 
     //Check fingers new opositions
     for(int i=0; i < FINGER_NUM; i++){
