@@ -6,19 +6,31 @@ Main folder of the Yubi Hand project. It contains the 3D-printable parts (`.stl`
 
 ```
 Yubi_Hand_model
-├── Hand_Assembly
-│   ├── Finger_Module_withoutPads
-│   ├── Finger_Module_withPads
-│   ├── Mounting
-│   │   └── UR3s_50mm
-│   ├── Palm
-│   ├── Thumb_withoutPad
-│   └── Tumb_withPad
-├── Hand_Assembly_Model_URDF
-│   ├── meshes
-│   └── Hand_v3_Assembly.urdf
-├── Hand_MaterialList.xlsx
-└── Recommended orientation.pdf
+      │
+      ├── Hand_Assembly
+      │         │
+      │         ├── Finger_Module_withoutPads
+      │         │
+      │         ├── Finger_Module_withPads
+      │         │
+      │         ├── Mounting
+      │         │   └── UR3s_50mm
+      │         │
+      │         ├── Palm
+      │         │
+      │         ├── Thumb_withoutPad
+      │         │
+      │         └── Tumb_withPad
+      │
+      ├── Hand_Assembly_Model_URDF
+      │         │
+      │         ├── meshes
+      │         │
+      │         └── Hand_v3_Assembly.urdf
+      │
+      ├── Hand_MaterialList.xlsx
+      │
+      └── Recommended orientation.pdf
 ```
 
 ## Contents
