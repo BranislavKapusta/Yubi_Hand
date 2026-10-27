@@ -46,9 +46,12 @@ The hand is controlled by an ESP32 with a servo board. It can be controlled over
 - **Bluetooth:** messages for finger positions and grasps, with a Python control script
 - **Serial:** same messages as Bluetooth
 
-Grasps are time-based sequences.
+> [!NOTE]
+> Grasps are time-based sequences.
 
-Control code: [ Hand_Control ](https://github.com/BranislavKapusta/Yubi_Hand/tree/main/Yubi_Hand_Controls)
+Control code for ESP32: [ Hand_Control ](https://github.com/BranislavKapusta/Yubi_Hand/tree/main/Yubi_Hand_Controls)
+
+Control from PC: [ PC_Control ](https://github.com/BranislavKapusta/Yubi_Hand/tree/main/Yubi_Hand_Controller_PC)
 
 ---
 Free for personal and non-commercial use, see LICENSE
