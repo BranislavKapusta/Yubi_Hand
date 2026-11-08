@@ -13,7 +13,7 @@ bool iswas_bluetooth_connected = false;
 void init_bluetooth_com(){
     serialBlueToothCom.begin("ProstheticHand");
     
-    Serial.println("Bluetooth init - Done");
+    Serial.println("[ Info ] Bluetooth - init done");
     //led_indicators[1].blink_on(500,1100); ----------------------------------------------------------------------------- <--- LEDs
 }
 

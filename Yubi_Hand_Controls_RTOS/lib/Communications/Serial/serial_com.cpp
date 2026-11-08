@@ -4,6 +4,7 @@
 
 void init_serial_com(){
     Serial.begin(115200);
+    Serial.println("[ Info ] Serial - init done");
 }
 
 void check_serial_communication(){

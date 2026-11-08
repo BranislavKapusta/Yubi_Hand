@@ -9,6 +9,7 @@ void init_communications(){
     init_serial_com();
     init_bluetooth_com();
     init_wifi_sever_setup();
+    Serial.println("[ Info ] COM - init done");
 }
 
 void communication_thread(void *pv) {

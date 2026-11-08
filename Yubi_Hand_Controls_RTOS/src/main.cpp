@@ -22,14 +22,16 @@ void ledTask(void *pv) {
 }
 
 void setup() {
-    init_finger_wrist_mutex();
-    init_main_control();
     init_communications();
+    init_finger_wrist_mutex();
+    init_finger_motors_setup();
+    //init_wrist_motors_setup();
+    init_main_control();
+    
+    
     /*
     init_led_indicators();
     */
-    init_finger_motors_setup();
-    //init_wrist_motors_setup();
    
     xTaskCreatePinnedToCore(motor_control_thread, "motorControl", 4096, NULL, 4, NULL, 1);
     xTaskCreatePinnedToCore(control_thread, "control", 4096, NULL, 3, NULL, 1);

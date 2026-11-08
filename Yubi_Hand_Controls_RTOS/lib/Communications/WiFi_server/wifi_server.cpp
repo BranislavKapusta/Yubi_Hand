@@ -69,6 +69,7 @@ void init_wifi_sever_setup(){
     }, ARDUINO_EVENT_WIFI_AP_STADISCONNECTED);
 
     server.begin();
+    Serial.println("[ Info ] WiFi - init done");
 }
 
 void handleSetSingle() {

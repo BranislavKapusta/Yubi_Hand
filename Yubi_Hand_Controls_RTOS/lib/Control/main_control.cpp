@@ -137,7 +137,9 @@ void default_pose(){
             wrists[i].setPos(wrists[i].defaultPos);  
         }
         xSemaphoreGive(finger_wrist_Mutex);
-    }
+        Serial.println("[ Info ] Control - Default positons set");
+    }else
+        Serial.println("[ Erro ] Control - Mutex Default positons - failed");
 }
 
 void safty_lossOfConnection(){
