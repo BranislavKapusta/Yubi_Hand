@@ -8,7 +8,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ESP32 Hand Controller</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <style>
         :root {
             --accent-blue: #2563eb;
@@ -19,12 +18,16 @@
             --panel-border: #2563eb;
             --text-main: #1e293b;
             --text-dim: #94a3b8;
+
+            /* System font stacks (no external downloads) */
+            --font-display: 'Segoe UI', system-ui, -apple-system, Roboto, 'Helvetica Neue', Arial, sans-serif;
+            --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', 'Courier New', monospace;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Share Tech Mono', monospace;
+            font-family: var(--font-mono);
             background-color: var(--dark-bg);
             background-image: var(--bg-image, none);
             background-size: cover;
@@ -49,7 +52,7 @@
         }
 
         .page-header h1 {
-            font-family: 'Orbitron', sans-serif;
+            font-family: var(--font-display);
             font-size: clamp(16px, 4vw, 22px);
             font-weight: 900;
             letter-spacing: 4px;
@@ -69,7 +72,7 @@
             right: 0;
             top: 50%;
             transform: translateY(-50%);
-            font-family: 'Orbitron', sans-serif;
+            font-family: var(--font-display);
             font-size: 14px;
             font-weight: 900;
             width: 38px;
@@ -103,7 +106,7 @@
         }
 
         .toggle-label {
-            font-family: 'Orbitron', sans-serif;
+            font-family: var(--font-display);
             font-size: 10px;
             font-weight: 700;
             letter-spacing: 2px;
@@ -156,7 +159,7 @@
         .send-all-btn {
             flex: 1;
             padding: 13px;
-            font-family: 'Orbitron', sans-serif;
+            font-family: var(--font-display);
             font-size: 11px;
             font-weight: 700;
             letter-spacing: 3px;
@@ -240,7 +243,7 @@
         /* ── SLIDER VALUE LABEL ── */
         .slider-val {
             position: absolute;
-            font-family: 'Orbitron', sans-serif;
+            font-family: var(--font-display);
             font-size: 9px;
             font-weight: 700;
             color: var(--accent-blue);
@@ -262,7 +265,7 @@
         }
 
         .pose-btn {
-            font-family: 'Orbitron', sans-serif;
+            font-family: var(--font-display);
             font-size: 11px;
             font-weight: 700;
             letter-spacing: 2px;
@@ -330,7 +333,7 @@
             background: #ffffff;
             border: 2px solid var(--accent-blue);
             color: var(--accent-blue);
-            font-family: 'Orbitron', sans-serif;
+            font-family: var(--font-display);
             font-size: 10px;
             letter-spacing: 2px;
             padding: 10px 20px;
