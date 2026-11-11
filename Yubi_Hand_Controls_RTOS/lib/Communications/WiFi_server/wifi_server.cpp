@@ -98,7 +98,6 @@ void handleSetSingle() {
         int index = server.arg("index").toInt();
         int val = server.arg("val").toInt();
         
-        //move_single(index,val); ----------------------------------------------------------------------------- <--- Controls
         //Build the msg
         msg = "POS001, 0";
         for (int i = 0; i < 8; i++){
