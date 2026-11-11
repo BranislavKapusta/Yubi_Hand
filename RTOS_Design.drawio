@@ -1,6 +1,6 @@
 <mxfile host="Electron">
   <diagram name="Page-1" id="pYfjLDAlY6Jnao-AQldn">
-    <mxGraphModel dx="694" dy="479" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="1201" dy="828" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -216,7 +216,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="hmgmuANX0DWDNjcxQtCv-21" connectable="0" parent="hmgmuANX0DWDNjcxQtCv-20" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;defaultLabelBackgroundColor=page;" value="String signalCode" vertex="1">
+        <mxCell id="hmgmuANX0DWDNjcxQtCv-21" connectable="0" parent="hmgmuANX0DWDNjcxQtCv-20" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;defaultLabelBackgroundColor=page;" value="structure Led_cmd_msg" vertex="1">
           <mxGeometry relative="1" x="-0.0588" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
@@ -228,7 +228,7 @@
           <mxGeometry height="140" width="120" x="204" y="90" as="geometry" />
         </mxCell>
         <mxCell id="NXYgv6eYSpR8WP6Adfdl-1" parent="1" style="swimlane;whiteSpace=wrap;html=1;" value="Msgs Structure" vertex="1">
-          <mxGeometry height="200" width="314" x="16" y="1320" as="geometry" />
+          <mxGeometry height="240" width="314" x="16" y="1320" as="geometry" />
         </mxCell>
         <mxCell id="NXYgv6eYSpR8WP6Adfdl-4" parent="NXYgv6eYSpR8WP6Adfdl-1" style="whiteSpace=wrap;html=1;fillColor=light-dark(#FFFFFF,#660000);" value="Error - [ Erro ] Who - Msg&lt;div&gt;Example: [ Erro ] Blue - Disconnect&lt;/div&gt;" vertex="1">
           <mxGeometry height="50" width="293" x="10.5" y="30" as="geometry" />
@@ -236,11 +236,55 @@
         <mxCell id="NXYgv6eYSpR8WP6Adfdl-5" parent="NXYgv6eYSpR8WP6Adfdl-1" style="whiteSpace=wrap;html=1;fillColor=light-dark(#FFFFFF,#000066);" value="Info - [ Info ] Who - Msg&lt;div&gt;Example: [ Info ] WiFi - Connected&lt;/div&gt;" vertex="1">
           <mxGeometry height="50" width="293" x="10.5" y="90" as="geometry" />
         </mxCell>
+        <mxCell id="IeIX1Vlak3EvSMlXH8t4-1" parent="NXYgv6eYSpR8WP6Adfdl-1" style="whiteSpace=wrap;html=1;fillColor=light-dark(#FFFFFF,#990000);" value="Alert - [ Alrt ] Who - Msg&lt;div&gt;Example: [ Alrt ] Loss of connection&lt;/div&gt;" vertex="1">
+          <mxGeometry height="50" width="293" x="10.5" y="150" as="geometry" />
+        </mxCell>
         <mxCell id="Zrdq4inMKP5IOLK95w0V-1" parent="1" style="whiteSpace=wrap;html=1;fillColor=light-dark(#FFFFFF,#660000);" value="commands_Mutex" vertex="1">
           <mxGeometry height="25" width="180" x="342" y="680" as="geometry" />
         </mxCell>
         <mxCell id="Zrdq4inMKP5IOLK95w0V-2" parent="1" style="whiteSpace=wrap;html=1;fillColor=light-dark(#FFFFFF,#660000);" value="finger_wrist_Mutex" vertex="1">
           <mxGeometry height="25" width="190" x="560" y="680" as="geometry" />
+        </mxCell>
+        <mxCell id="IeIX1Vlak3EvSMlXH8t4-2" parent="1" style="swimlane;whiteSpace=wrap;html=1;startSize=23;" value="Action commander" vertex="1">
+          <mxGeometry height="400" width="568" x="522" y="920" as="geometry" />
+        </mxCell>
+        <mxCell id="IeIX1Vlak3EvSMlXH8t4-7" edge="1" parent="IeIX1Vlak3EvSMlXH8t4-2" source="IeIX1Vlak3EvSMlXH8t4-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;defaultLabelBackgroundColor=page;" target="IeIX1Vlak3EvSMlXH8t4-6">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="78" y="160" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="IeIX1Vlak3EvSMlXH8t4-8" connectable="0" parent="IeIX1Vlak3EvSMlXH8t4-7" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;defaultLabelBackgroundColor=page;" value="Add Action command" vertex="1">
+          <mxGeometry relative="1" x="0.0832" y="1" as="geometry">
+            <mxPoint x="-16" y="-19" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="IeIX1Vlak3EvSMlXH8t4-3" parent="IeIX1Vlak3EvSMlXH8t4-2" style="whiteSpace=wrap;html=1;" value="COM" vertex="1">
+          <mxGeometry height="60" width="120" x="18" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="IeIX1Vlak3EvSMlXH8t4-4" parent="IeIX1Vlak3EvSMlXH8t4-2" style="whiteSpace=wrap;html=1;" value="Main Control therad&lt;div&gt;Actions&lt;/div&gt;" vertex="1">
+          <mxGeometry height="42.5" width="180" x="358" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="IeIX1Vlak3EvSMlXH8t4-13" edge="1" parent="IeIX1Vlak3EvSMlXH8t4-2" source="IeIX1Vlak3EvSMlXH8t4-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;defaultLabelBackgroundColor=page;" target="IeIX1Vlak3EvSMlXH8t4-12">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="448" y="280" />
+              <mxPoint x="98" y="280" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="IeIX1Vlak3EvSMlXH8t4-5" parent="IeIX1Vlak3EvSMlXH8t4-2" style="whiteSpace=wrap;html=1;" value="Turn on/off motors&lt;div&gt;...&lt;/div&gt;" vertex="1">
+          <mxGeometry height="145" width="180" x="358" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="IeIX1Vlak3EvSMlXH8t4-6" parent="IeIX1Vlak3EvSMlXH8t4-2" style="rounded=1;whiteSpace=wrap;html=1;" value="Action command buffer" vertex="1">
+          <mxGeometry height="60" width="140" x="158" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="IeIX1Vlak3EvSMlXH8t4-11" edge="1" parent="IeIX1Vlak3EvSMlXH8t4-2" source="IeIX1Vlak3EvSMlXH8t4-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.008;entryY=0.344;entryDx=0;entryDy=0;entryPerimeter=0;defaultLabelBackgroundColor=page;" target="IeIX1Vlak3EvSMlXH8t4-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="IeIX1Vlak3EvSMlXH8t4-12" parent="IeIX1Vlak3EvSMlXH8t4-2" style="whiteSpace=wrap;html=1;" value="Turn on/off motor" vertex="1">
+          <mxGeometry height="60" width="120" x="38" y="310" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

@@ -1,5 +1,7 @@
 #pragma once
 #include "BluetoothSerial.h"
+#include "main_control.h"
+#include "led_indicators.h"
 
 //### Variables and Constants ##########################################
 extern bool iswas_bluetooth_connected;

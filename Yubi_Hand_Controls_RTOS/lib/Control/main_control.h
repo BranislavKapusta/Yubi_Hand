@@ -20,14 +20,23 @@ struct Pos_command{
     int w_2_pos;
 };
 
+struct Act_command{
+    int time;
+    String action;
+    int num;
+    String name;
+};
 
 //### Variables and Constants ##########################################
+extern String infoMsg;
+
 extern bool init_function_done;
 
 extern std::vector<Pos_command> pos_command_buffer;
-extern std::vector<Pos_command> action_command_buffer;
+extern std::vector<Act_command> action_command_buffer;
 extern SemaphoreHandle_t commands_Mutex;
-extern unsigned long lastCommandUpdateTime;
+extern unsigned long lastPosCommandUpdateTime;
+extern unsigned long lastActCommandUpdateTime;
 extern unsigned long elapsedTime;
 
 //### Functions ########################################################
@@ -39,11 +48,11 @@ bool pos_command_add(Pos_command input_command);
 void pos_command_reset();
 
 void action_commands();
-void action_commands_add();
+bool action_commands_add(Act_command input_command);
 void action_command_reset();
 
 void default_pose();
-void safty_lossOfConnection();
+bool safty_lossOfConnection();
 //void move_single(uint8_t index, float pos);
 //void move_multy(float pos[8]);
 void move_sequence(const char* pose);

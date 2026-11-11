@@ -1,7 +1,12 @@
 #pragma once
-
+#include <Arduino.h>
+#include "communications.h"
+#include "led_indicators.h"
 
 //### Class ##########################################
+
+
+//### Variables and Constants ##########################################
 
 
 //### Functions ########################################################

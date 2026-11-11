@@ -26,7 +26,6 @@ void process_communication_msgs(String com_id, String msg){
     String erroMsg = "";
 
     Serial.println(infoMsg);
-    //led_indicators[2].turn_on(500); ----------------------------------------------------------------------------- <--- LEDs
 
     msg.trim();
 
@@ -81,8 +80,9 @@ void process_communication_msgs(String com_id, String msg){
 
         infoMsg = "[ Info ] "+com_id+" COM - Recived: " + marking + pose;
         Serial.println(infoMsg);
-        //move_sequence(pose.c_str()); ----------------------------------------------------------------------------- <--- Controls
-        //Add command to the general commands
+
+        Act_command act_cmd = {0, "Pose", 0, pose};
+        action_commands_add(act_cmd);
     }
 
     // Change speeds of the servos
@@ -96,12 +96,12 @@ void process_communication_msgs(String com_id, String msg){
         int motor_num_index = msg.indexOf(',', cmd_index + 1);
         
         String cmd = msg.substring(marking_index + 1, cmd_index);
-        int motor_index = msg.substring(cmd_index + 1, motor_num_index).toInt();;
+        int motor_num = msg.substring(cmd_index + 1, motor_num_index).toInt();;
 
-        infoMsg = "[ Info ] "+com_id+" COM - Recived: " + marking + cmd + String(motor_index);
+        infoMsg = "[ Info ] "+com_id+" COM - Recived: " + marking + cmd + String(motor_num);
         Serial.println(infoMsg);
 
-        //turnOnOff_motors(cmd,motor_index); ----------------------------------------------------------------------------- <--- Controls
-        //Add command to the general commands
+        Act_command act_cmd = {0, cmd, motor_num, "None"};
+        action_commands_add(act_cmd);
     }
 }

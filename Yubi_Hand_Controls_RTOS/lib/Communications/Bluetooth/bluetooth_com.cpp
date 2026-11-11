@@ -1,6 +1,7 @@
 #include "bluetooth_com.h"
 #include "BluetoothSerial.h"
-#include "communications.h"
+#include "main_control.h"
+#include "led_indicators.h"
 
 // Notes:
 
@@ -8,13 +9,15 @@
 //### Variables and Constants ##########################################
 BluetoothSerial serialBlueToothCom;
 bool iswas_bluetooth_connected = false;
+static Led_cmd_msg cmd = {0, 1, 100, 100};
 
 //### Functions ########################################################
 void init_bluetooth_com(){
     serialBlueToothCom.begin("ProstheticHand");
     
     Serial.println("[ Info ] Bluetooth - init done");
-    //led_indicators[1].blink_on(500,1100); ----------------------------------------------------------------------------- <--- LEDs
+    cmd = {1, 1, 500, 1100};
+    xQueueSend(led_cmd_Queue, &cmd, 0);
 }
 
 void check_bluetooth_communication(){
@@ -25,9 +28,11 @@ void check_bluetooth_communication(){
 
     if(check_connected_bluetooth()){
         if(!iswas_bluetooth_connected)iswas_bluetooth_connected = true;
-        //led_indicators[1].turn_on(0); ----------------------------------------------------------------------------- <--- LEDs
+        cmd = {1, 0, 0, 0};
+        xQueueSend(led_cmd_Queue, &cmd, 0);
     }else{
-        //led_indicators[1].blink_on(500,1100); ----------------------------------------------------------------------------- <--- LEDs
+        cmd = {1, 1, 500, 1100};
+        xQueueSend(led_cmd_Queue, &cmd, 0);
         if(iswas_bluetooth_connected){
             iswas_bluetooth_connected = false;
             //safty_lossOfConnection(); ----------------------------------------------------------------------------- <--- Controls

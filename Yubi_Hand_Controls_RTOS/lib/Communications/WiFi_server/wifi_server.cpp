@@ -3,6 +3,8 @@
 #include <WebServer.h>
 #include "LittleFS.h"
 #include "communications.h"
+#include "main_control.h"
+#include "led_indicators.h"
 
 // Notes:
 // Wifi - IP address: 192.168.4.1
@@ -16,24 +18,32 @@ bool iswas_wifi_connected = false;
 
 WebServer server(80);
 
+static Led_cmd_msg cmd = {0, 1, 100, 100};
+
+String errMsg = "";
+String infMsg = "";
+
+String msg = "";
 
 //### Functions ########################################################
 void init_wifi_sever_setup(){
     // Start filesystem
     if (!LittleFS.begin()) {
-        Serial.println("LittleFS Mount Failed");
+        errMsg = "[ Erro ] WiFi - LittleFS Mount Failed";
+        Serial.println(errMsg);
         return;
     }
 
     //Wifi setup
     if (!WiFi.softAP(ssid, password)) {
-        Serial.println("WiFi AP Failed to start");
-        //led_indicators[2].blink_on(500,500); --------------------------------------------------------- <--- Send Signal to LEDs
+        errMsg = "[ Erro ] WiFi - WiFi AP Failed to start";
+        Serial.println(errMsg);
+        cmd = {2, 1, 500, 500}; xQueueSend(led_cmd_Queue, &cmd, 0);
         return;
     }
 
-    //led_indicators[0].blink_on(500,1100); --------------------------------------------------------- <--- Send Signal to LEDs
-    
+    cmd = {0, 1, 500, 1100}; xQueueSend(led_cmd_Queue, &cmd, 0);
+
     server.on("/", handleRoot);
     server.on("/setsingle", handleSetSingle);
     server.on("/setmulty", handleSetMulty);
@@ -47,24 +57,31 @@ void init_wifi_sever_setup(){
     });
 
     server.onNotFound([]() {
-        Serial.print("NOT FOUND: ");
+        errMsg = "[ Erro ] WiFi - not found: ";
+        Serial.print(errMsg);
         Serial.println(server.uri());
         server.send(404, "text/plain", "Not found");
     });
 
     // Connection check
     WiFi.onEvent([](WiFiEvent_t event, WiFiEventInfo_t info) {
-        Serial.println("Client connected");
-        //led_indicators[0].turn_on(0);--------------------------------------------------------- <--- Send Signal to LEDs
+        infMsg = "[ Info ] WiFi - Client connected";
+        Serial.println(infMsg);
+        cmd = {0, 0, 0, 0}; xQueueSend(led_cmd_Queue, &cmd, 0);
+
         if(!iswas_wifi_connected)iswas_wifi_connected = true;
     }, ARDUINO_EVENT_WIFI_AP_STACONNECTED);
 
     WiFi.onEvent([](WiFiEvent_t event, WiFiEventInfo_t info) {
-        Serial.println("Client disconnected");
-        //led_indicators[0].blink_on(500,1100); --------------------------------------------------------- <--- Send Signal to LEDs
+        infMsg = "[ Aler ] WiFi - Client disconnected";
+        Serial.println(infMsg);
+        cmd = {0, 1, 500, 1100}; xQueueSend(led_cmd_Queue, &cmd, 0);
         if(iswas_wifi_connected){
             iswas_wifi_connected = false;
-            //safty_lossOfConnection(); ----------------------------------------------------------------------------- <--- Controls
+            for(int i = 0; i < 3; i++){
+                if(safty_lossOfConnection() == true) break;
+                vTaskDelay(pdMS_TO_TICKS(20));
+            }
         }
     }, ARDUINO_EVENT_WIFI_AP_STADISCONNECTED);
 
@@ -73,14 +90,26 @@ void init_wifi_sever_setup(){
 }
 
 void handleSetSingle() {
-    Serial.println("Received CMD: Set Single");
-    //led_indicators[2].turn_on(500); --------------------------------------------------------- <--- Send Signal to LEDs
+    infMsg = "[ Info ] WiFi - Received CMD - Set Single";
+    Serial.println(infMsg);
+    cmd = {2, 0, 500, 0}; xQueueSend(led_cmd_Queue, &cmd, 0);
 
     if (server.hasArg("index") && server.hasArg("val")) {
         int index = server.arg("index").toInt();
         int val = server.arg("val").toInt();
         
         //move_single(index,val); ----------------------------------------------------------------------------- <--- Controls
+        //Build the msg
+        msg = "POS001, 0";
+        for (int i = 0; i < 8; i++){
+            if(i == index){
+                msg +=",";
+                msg += String(val);
+            }else{
+                msg +=",-1";
+            }
+        }
+        process_communication_msgs("WiFi",msg);
     }
     server.send(200, "text/plain", "OK");
 }
@@ -88,24 +117,31 @@ void handleSetSingle() {
 void handleSetMulty() {
     float values[8];
     bool allFound = true;
-    //led_indicators[2].turn_on(500); --------------------------------------------------------- <--- Send Signal to LEDs
+    cmd = {2, 0, 500, 0}; xQueueSend(led_cmd_Queue, &cmd, 0);
+
+    infMsg = "[ Info ] WiFi - Recived multy set position";
+    Serial.println(infMsg);
 
     for (int i = 0; i < 8; i++) {
         String key = "v" + String(i);
         if (server.hasArg(key)) {
             values[i] = server.arg(key).toInt();
             Serial.print(key + ": ");
-            Serial.println(values[i]);
+            Serial.print(values[i]);
         } else {
             Serial.print("Missing: ");
-            Serial.println(key);
+            Serial.print(key);
             allFound = false;
         }
     }
 
     if (allFound) {
-        // Use your values here
-        //move_multy(values);----------------------------------------------------------------------------- <--- Controls
+        msg = "POS001, 0";
+        for (int i = 0; i < 8; i++){
+            msg += ",";
+            msg += String(values[i]);
+        }
+        process_communication_msgs("WiFi",msg);
     }
 
     server.send(200, "text/plain", "OK");
@@ -118,28 +154,20 @@ void handleRoot() {
 }
 
 void handlePose() {
-    //led_indicators[2].turn_on(500); --------------------------------------------------------- <--- Send Signal to LEDs
+    cmd = {2, 0, 500, 0}; xQueueSend(led_cmd_Queue, &cmd, 0);
 
     if (server.hasArg("name")) {
         String name = server.arg("name");
-        Serial.print("Pose: "); Serial.println(name);
+        
+        String msg = "GRIP01,"+name;
 
-        if (name == "open") //move_sequence(name.c_str()) ----------------------------------------------------------------------------- <--- Controls
-        ;
-        if (name == "fist") //move_sequence(name.c_str()) ----------------------------------------------------------------------------- <--- Controls
-        ;
-        if (name == "point") //move_sequence(name.c_str()) ----------------------------------------------------------------------------- <--- Controls
-        ;
-        if (name == "pinch") //move_sequence(name.c_str()) ----------------------------------------------------------------------------- <--- Controls
-        ;
-        if (name == "3pinch") //move_sequence(name.c_str()) ----------------------------------------------------------------------------- <--- Controls
-        ;
-        if (name == "cilinder") //move_sequence(name.c_str()) ----------------------------------------------------------------------------- <--- Controls
-        ;
-        if (name == "small_cilinder") //move_sequence(name.c_str()) ----------------------------------------------------------------------------- <--- Controls
-        ;
-        if (name == "relax") //move_sequence(name.c_str()) ----------------------------------------------------------------------------- <--- Controls
-        ;
+        if (name == "open" || name == "fist" || name == "point" || name == "pinch" || name == "3pinch" || name == "cilinder" || name == "small_cilinder" || name == "relax"){
+            process_communication_msgs("WiFi",msg);
+        }else{
+            errMsg = "[ Erro ] WiFi - Undefined pose name";
+            Serial.println(errMsg);
+        }
+        
     }
     server.send(200, "text/plain", "OK");
 }

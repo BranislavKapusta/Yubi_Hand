@@ -12,11 +12,13 @@
 
 
 //### Variables and Constants ##########################################
+String infoMsg = "";
 bool init_function_done = false;
 std::vector<Pos_command> pos_command_buffer;
-std::vector<Pos_command> action_command_buffer;
+std::vector<Act_command> action_command_buffer;
 SemaphoreHandle_t commands_Mutex = NULL; 
-unsigned long lastCommandUpdateTime = 0;
+unsigned long lastPosCommandUpdateTime = 0;
+unsigned long lastActCommandUpdateTime = 0;
 unsigned long elapsedTime = 0;
 
 //### Functions ########################################################
@@ -34,10 +36,13 @@ void init_main_control(){
     action_command_buffer.reserve(64);
 
     default_pose();
+
     init_function_done = true;
     Serial.println("[ Info ] Control - F-W Init done");
 }
 
+
+//### Position commands functions ##########################
 void pos_commands(){
     Pos_command cmd;
     bool newTimeCMD = false;
@@ -52,7 +57,7 @@ void pos_commands(){
 
     //Check new command and elapsed time
     if(newTimeCMD){
-        elapsedTime = millis() - lastCommandUpdateTime;
+        elapsedTime = millis() - lastPosCommandUpdateTime;
 
         //Update positions
         if(xSemaphoreTake(finger_wrist_Mutex, pdMS_TO_TICKS(10)) == pdTRUE){
@@ -90,11 +95,11 @@ void pos_commands(){
             if(xSemaphoreTake(commands_Mutex, pdMS_TO_TICKS(10)) == pdTRUE){
                 pos_command_buffer.erase(pos_command_buffer.begin());
                 xSemaphoreGive(commands_Mutex);
-                lastCommandUpdateTime = millis();
+                lastPosCommandUpdateTime = millis();
             }
         }
     }else 
-        lastCommandUpdateTime = millis();
+        lastPosCommandUpdateTime = millis();
 }
 
 bool pos_command_add(Pos_command input_command){
@@ -116,18 +121,77 @@ void pos_command_reset(){
     }
 }
 
-void action_commands(){
 
+//### Action commands functions ############################
+void action_commands(){
+    Act_command cmd;
+    bool newTimeCMD = false;
+
+    if(xSemaphoreTake(commands_Mutex, pdMS_TO_TICKS(10)) == pdTRUE){
+        if(action_command_buffer.size() > 0){
+            cmd = action_command_buffer.front();
+            newTimeCMD = true;
+        }
+        xSemaphoreGive(commands_Mutex);
+    }
+
+    //Check new command and elapsed time
+    if(newTimeCMD){
+        elapsedTime = millis() - lastActCommandUpdateTime;
+
+        //Execute position actions
+        if(xSemaphoreTake(commands_Mutex, pdMS_TO_TICKS(10)) == pdTRUE){
+            if(cmd.action == "Pose"){
+                move_sequence(cmd.name.c_str());
+            }
+            xSemaphoreGive(commands_Mutex);
+        }
+
+        //Execute direct actions for fingers
+        if(xSemaphoreTake(finger_wrist_Mutex, pdMS_TO_TICKS(10)) == pdTRUE){
+            //Turn ON or OFF motors action
+            if(cmd.action == "TurnON"){
+                turnOnOff_motors("on",cmd.num);
+            }else if(cmd.action == "TurnOFF"){
+                turnOnOff_motors("off",cmd.num);
+            }
+            xSemaphoreGive(finger_wrist_Mutex);
+        }
+        
+        //Delete the elapsed entry
+        if(elapsedTime > cmd.time){
+            //Delete the elapsed entry
+            if(xSemaphoreTake(commands_Mutex, pdMS_TO_TICKS(10)) == pdTRUE){
+                action_command_buffer.erase(action_command_buffer.begin());
+                xSemaphoreGive(commands_Mutex);
+                lastActCommandUpdateTime = millis();
+            }
+        }
+    }else 
+        lastActCommandUpdateTime = millis();
 }
 
-void action_commands_add(){
+bool action_commands_add(Act_command input_command){
+    bool result = false;
 
+    if (xSemaphoreTake(commands_Mutex, pdMS_TO_TICKS(10)) == pdTRUE) {
+        action_command_buffer.push_back(input_command);
+        xSemaphoreGive(commands_Mutex);
+        result = true;
+    }
+
+    return result;
 }
 
 void action_command_reset(){
-
+    if (xSemaphoreTake(commands_Mutex, pdMS_TO_TICKS(10)) == pdTRUE) {
+        action_command_buffer.clear();
+        xSemaphoreGive(commands_Mutex);
+    }
 }
 
+
+//### Other supporting functions ###########################
 void default_pose(){
     if(xSemaphoreTake(finger_wrist_Mutex, pdMS_TO_TICKS(10)) == pdTRUE){
         for (int i = 0; i < FINGER_NUM; i++) {
@@ -142,10 +206,16 @@ void default_pose(){
         Serial.println("[ Erro ] Control - Mutex Default positons - failed");
 }
 
-void safty_lossOfConnection(){
-    if(xSemaphoreTake(commands_Mutex, pdMS_TO_TICKS(10)) == pdTRUE){
+bool safty_lossOfConnection(){
+    if(xSemaphoreTake(commands_Mutex, pdMS_TO_TICKS(100)) == pdTRUE){
+        pos_command_buffer.clear();
         pos_command_buffer.push_back({0, 0, 0, 0, 0, 0, 0, -1, -1});
         xSemaphoreGive(commands_Mutex);
+        Serial.println("[ Alrt ] Safty - Loss of connection");
+        return true;
+    }else{
+        Serial.println("[ Erro ] Safty - failed - Loss of connection");
+        return false;
     }
 }
 
@@ -169,83 +239,101 @@ void move_multy(float pos[8]){
     
 }
 */
-/*
+
 void move_sequence(const char* pose){
     pos_command_reset(); //Every new sequence is reseting for the previews commands
 
     //pos_command_buffer.push_back({1000, -1, -1, -1, -1, -1, -1, -1, -1});
 
     if(strcmp(pose, "open") == 0){
-        pos_command_buffer.push_back({0, 0, 0, 0, 0, 0, 0, -1, -1});
-
+        if (xSemaphoreTake(commands_Mutex, pdMS_TO_TICKS(10)) == pdTRUE){
+            pos_command_buffer.push_back({0, 0, 0, 0, 0, 0, 0, -1, -1});
+            xSemaphoreGive(commands_Mutex);
+        }
     }else if(strcmp(pose, "fist") == 0){
-        pos_command_buffer.push_back({2000, 0, 0, 0, 0, 0, 0, -1, -1});
-        pos_command_buffer.push_back({1500, 85, 85, 85, 85, 0, 0, -1, -1});
-        pos_command_buffer.push_back({0, -1, -1, -1, -1, 50, 85, -1, -1});
-
+        if (xSemaphoreTake(commands_Mutex, pdMS_TO_TICKS(10)) == pdTRUE){
+            pos_command_buffer.push_back({2000, 0, 0, 0, 0, 0, 0, -1, -1});
+            pos_command_buffer.push_back({1500, 85, 85, 85, 85, 0, 0, -1, -1});
+            pos_command_buffer.push_back({0, -1, -1, -1, -1, 50, 85, -1, -1});
+            xSemaphoreGive(commands_Mutex);
+        }
     }else if(strcmp(pose, "pinch") == 0){
-        pos_command_buffer.push_back({2000, 0, 0, 0, 0, 0, 0, -1, -1});
-        pos_command_buffer.push_back({2000, 0, 0, 0, 0, 40, 60, -1, -1});
-        pos_command_buffer.push_back({0, 47, 0, 0, 0, -1, -1, -1, -1});
-
+        if (xSemaphoreTake(commands_Mutex, pdMS_TO_TICKS(10)) == pdTRUE){
+            pos_command_buffer.push_back({2000, 0, 0, 0, 0, 0, 0, -1, -1});
+            pos_command_buffer.push_back({2000, 0, 0, 0, 0, 40, 60, -1, -1});
+            pos_command_buffer.push_back({0, 47, 0, 0, 0, -1, -1, -1, -1});
+            xSemaphoreGive(commands_Mutex);
+        }
     }else if(strcmp(pose, "3pinch") == 0){
-        pos_command_buffer.push_back({2000, 0, 0, 0, 0, 0, 0, -1, -1});
-        pos_command_buffer.push_back({2000, 0, 0, 0, 0, 40, 65, -1, -1});
-        pos_command_buffer.push_back({0, 47, 47, 0, 0, -1, -1, -1, -1});
-
+        if (xSemaphoreTake(commands_Mutex, pdMS_TO_TICKS(10)) == pdTRUE){
+            pos_command_buffer.push_back({2000, 0, 0, 0, 0, 0, 0, -1, -1});
+            pos_command_buffer.push_back({2000, 0, 0, 0, 0, 40, 65, -1, -1});
+            pos_command_buffer.push_back({0, 47, 47, 0, 0, -1, -1, -1, -1});
+            xSemaphoreGive(commands_Mutex);
+        }
     }else if(strcmp(pose, "point") == 0){
-        pos_command_buffer.push_back({1000, 0, 85, 85, 85, 0, 0, -1, -1});
-        pos_command_buffer.push_back({1000, 0, 85, 85, 85, 50, 85, -1, -1});
-
+        if (xSemaphoreTake(commands_Mutex, pdMS_TO_TICKS(10)) == pdTRUE){
+            pos_command_buffer.push_back({1000, 0, 85, 85, 85, 0, 0, -1, -1});
+            pos_command_buffer.push_back({1000, 0, 85, 85, 85, 50, 85, -1, -1});
+            xSemaphoreGive(commands_Mutex);
+        }
     }else if(strcmp(pose, "cilinder") == 0){
-        pos_command_buffer.push_back({2000, 0, 0, 0, 0, 0, 0, -1, -1});//Reset
+        if (xSemaphoreTake(commands_Mutex, pdMS_TO_TICKS(10)) == pdTRUE){
+            pos_command_buffer.push_back({2000, 0, 0, 0, 0, 0, 0, -1, -1});//Reset
 
-        pos_command_buffer.push_back({1000, 0, 0, 0, 0, 10, 90, -1, -1});
-        pos_command_buffer.push_back({100, -1, -1, -1, 30, -1, -1, -1, -1});
-        pos_command_buffer.push_back({100, -1, -1, 30, -1, -1, -1, -1, -1});
-        pos_command_buffer.push_back({100, -1, 30, -1, -1, -1, -1, -1, -1});
-        pos_command_buffer.push_back({  0, 30, -1, -1, -1, -1, -1, -1, -1});
-
+            pos_command_buffer.push_back({1000, 0, 0, 0, 0, 10, 90, -1, -1});
+            pos_command_buffer.push_back({100, -1, -1, -1, 30, -1, -1, -1, -1});
+            pos_command_buffer.push_back({100, -1, -1, 30, -1, -1, -1, -1, -1});
+            pos_command_buffer.push_back({100, -1, 30, -1, -1, -1, -1, -1, -1});
+            pos_command_buffer.push_back({  0, 30, -1, -1, -1, -1, -1, -1, -1});
+            xSemaphoreGive(commands_Mutex);
+        }
     }else if(strcmp(pose, "small_cilinder") == 0){
-        pos_command_buffer.push_back({2000, 0, 0, 0, 0, 0, 0, -1, -1});//Reset
+        if (xSemaphoreTake(commands_Mutex, pdMS_TO_TICKS(10)) == pdTRUE){
+            pos_command_buffer.push_back({2000, 0, 0, 0, 0, 0, 0, -1, -1});//Reset
 
-        pos_command_buffer.push_back({1000, 0, 0, 0, 0, 10, 90, -1, -1});
-        pos_command_buffer.push_back({100, -1, -1, -1, 50, -1, -1, -1, -1});
-        pos_command_buffer.push_back({100, -1, -1, 50, -1, -1, -1, -1, -1});
-        pos_command_buffer.push_back({100, -1, 50, -1, -1, -1, -1, -1, -1});
-        pos_command_buffer.push_back({  0, 50, -1, -1, -1, -1, -1, -1, -1});
-
+            pos_command_buffer.push_back({1000, 0, 0, 0, 0, 10, 90, -1, -1});
+            pos_command_buffer.push_back({100, -1, -1, -1, 50, -1, -1, -1, -1});
+            pos_command_buffer.push_back({100, -1, -1, 50, -1, -1, -1, -1, -1});
+            pos_command_buffer.push_back({100, -1, 50, -1, -1, -1, -1, -1, -1});
+            pos_command_buffer.push_back({  0, 50, -1, -1, -1, -1, -1, -1, -1});
+            xSemaphoreGive(commands_Mutex);
+        }
     }else if(strcmp(pose, "relax") == 0){
-        pos_command_buffer.push_back({2000, 0, 0, 0, 0, 0, 0, -1, -1});//Reset
+        if (xSemaphoreTake(commands_Mutex, pdMS_TO_TICKS(10)) == pdTRUE){
+            pos_command_buffer.push_back({2000, 0, 0, 0, 0, 0, 0, -1, -1});//Reset
 
-        pos_command_buffer.push_back({100, -1, -1, -1, 21, -1, -1, -1, -1});
-        pos_command_buffer.push_back({100, -1, -1, 13, -1, -1, -1, -1, -1});
-        pos_command_buffer.push_back({100, -1, 12, -1, -1, -1, -1, -1, -1});
-        pos_command_buffer.push_back({100, 10, -1, -1, -1, -1, -1, -1, -1});
-        pos_command_buffer.push_back({100, -1, -1, -1, -1, 15, 23, -1, -1});
-        
+            pos_command_buffer.push_back({100, -1, -1, -1, 21, -1, -1, -1, -1});
+            pos_command_buffer.push_back({100, -1, -1, 13, -1, -1, -1, -1, -1});
+            pos_command_buffer.push_back({100, -1, 12, -1, -1, -1, -1, -1, -1});
+            pos_command_buffer.push_back({100, 10, -1, -1, -1, -1, -1, -1, -1});
+            pos_command_buffer.push_back({100, -1, -1, -1, -1, 15, 23, -1, -1});
+            xSemaphoreGive(commands_Mutex);
+        }        
     }else{
-        Serial.print("Error - pose not defined - pose: ");
-        Serial.println(pose);
+        infoMsg = "[ Erro ] Main Control - Pose not defined -"+ String(pose);
+        Serial.println(infoMsg);
     }
     
 }
-*/
-/*
+
 void turnOnOff_motors(String cmd_type, int motor_index){
-    if( (cmd_type == "on" || cmd_type == " on")  && motor_index < 8){
+    if( (cmd_type == "on" || cmd_type == " on" || cmd_type == "ON" || cmd_type == " ON")  && motor_index < 8){
         if(motor_index >= 0 && motor_index < 6){
             fingers[motor_index].turnOn();
         }else if(motor_index >= 6 && motor_index < 8){
             wrists[motor_index - 6].turnOn();
         }
-    }else if( (cmd_type == "off" ||  cmd_type == " off") && motor_index < 8){
+        infoMsg = "[ Info ] Action - turned ON motor " + String(motor_index);
+        Serial.println(infoMsg);
+    }else if( (cmd_type == "off" ||  cmd_type == " off" || cmd_type == " OFF" || cmd_type == "OFF") && motor_index < 8){
         if(motor_index >= 0 && motor_index < 6){
             fingers[motor_index].turnOff();
         }else if(motor_index >= 6 && motor_index < 8){
             wrists[motor_index - 6].turnOff();
         }
+        infoMsg = "[ Info ] Action - turned OFF motor " + String(motor_index);
+        Serial.println(infoMsg);
     }else
-        Serial.println("Funcion turn on/off ERROR");
+        Serial.println("[ Erro ] Action - turn on/off ERROR");
 }
-*/
