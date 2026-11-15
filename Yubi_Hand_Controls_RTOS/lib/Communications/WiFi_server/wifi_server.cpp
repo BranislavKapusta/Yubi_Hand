@@ -18,7 +18,7 @@ bool iswas_wifi_connected = false;
 
 WebServer server(80);
 
-static Led_cmd_msg cmd = {0, 1, 100, 100};
+static Led_cmd_msg cmd = {"",0, 1, 100, 100};
 
 String errMsg = "";
 String infMsg = "";
@@ -38,11 +38,11 @@ void init_wifi_sever_setup(){
     if (!WiFi.softAP(ssid, password)) {
         errMsg = "[ Erro ] WiFi - WiFi AP Failed to start";
         Serial.println(errMsg);
-        cmd = {2, 1, 500, 500}; xQueueSend(led_cmd_Queue, &cmd, 0);
+        cmd = {"WiFi_F", 2, 1, 500, 500}; xQueueSend(led_cmd_Queue, &cmd, 0);
         return;
     }
 
-    cmd = {0, 1, 500, 1100}; xQueueSend(led_cmd_Queue, &cmd, 0);
+    cmd = {"WiFi_init",0, 1, 500, 1100}; xQueueSend(led_cmd_Queue, &cmd, 0);
 
     server.on("/", handleRoot);
     server.on("/setsingle", handleSetSingle);
@@ -67,15 +67,15 @@ void init_wifi_sever_setup(){
     WiFi.onEvent([](WiFiEvent_t event, WiFiEventInfo_t info) {
         infMsg = "[ Info ] WiFi - Client connected";
         Serial.println(infMsg);
-        cmd = {0, 0, 0, 0}; xQueueSend(led_cmd_Queue, &cmd, 0);
-
+        cmd = {"WiFi_Connect",0, 0, 0, 0}; xQueueSend(led_cmd_Queue, &cmd, 0);
+        
         if(!iswas_wifi_connected)iswas_wifi_connected = true;
     }, ARDUINO_EVENT_WIFI_AP_STACONNECTED);
 
     WiFi.onEvent([](WiFiEvent_t event, WiFiEventInfo_t info) {
         infMsg = "[ Aler ] WiFi - Client disconnected";
         Serial.println(infMsg);
-        cmd = {0, 1, 500, 1100}; xQueueSend(led_cmd_Queue, &cmd, 0);
+        cmd = {"WiFi_dis",0, 1, 500, 1100}; xQueueSend(led_cmd_Queue, &cmd, 0);
         if(iswas_wifi_connected){
             iswas_wifi_connected = false;
             for(int i = 0; i < 3; i++){
@@ -92,7 +92,7 @@ void init_wifi_sever_setup(){
 void handleSetSingle() {
     infMsg = "[ Info ] WiFi - Received CMD - Set Single";
     Serial.println(infMsg);
-    cmd = {2, 0, 500, 0}; xQueueSend(led_cmd_Queue, &cmd, 0);
+    cmd = {"WiFi_SingleR",2, 0, 500, 0}; xQueueSend(led_cmd_Queue, &cmd, 0);
 
     if (server.hasArg("index") && server.hasArg("val")) {
         int index = server.arg("index").toInt();
@@ -116,7 +116,7 @@ void handleSetSingle() {
 void handleSetMulty() {
     float values[8];
     bool allFound = true;
-    cmd = {2, 0, 500, 0}; xQueueSend(led_cmd_Queue, &cmd, 0);
+    cmd = {"WiFi_MultyR",2, 0, 500, 0}; xQueueSend(led_cmd_Queue, &cmd, 0);
 
     infMsg = "[ Info ] WiFi - Recived multy set position";
     Serial.println(infMsg);
@@ -153,7 +153,7 @@ void handleRoot() {
 }
 
 void handlePose() {
-    cmd = {2, 0, 500, 0}; xQueueSend(led_cmd_Queue, &cmd, 0);
+    cmd = {"WiFi_PoseR",2, 0, 500, 0}; xQueueSend(led_cmd_Queue, &cmd, 0);
 
     if (server.hasArg("name")) {
         String name = server.arg("name");

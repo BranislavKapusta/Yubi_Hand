@@ -8,6 +8,7 @@
 
 //### Structure
 struct Led_cmd_msg{
+    String signal_marking;
     int led_id;
     int patern;
     int time_on;

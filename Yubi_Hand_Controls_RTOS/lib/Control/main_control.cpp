@@ -24,8 +24,8 @@ unsigned long elapsedTime = 0;
 //### Functions ########################################################
 void control_thread(void *pv) {
     for (;;) {
+        action_commands();
         pos_commands();
-
         vTaskDelay(pdMS_TO_TICKS(50));
     }
 }
@@ -140,12 +140,10 @@ void action_commands(){
         elapsedTime = millis() - lastActCommandUpdateTime;
 
         //Execute position actions
-        if(xSemaphoreTake(commands_Mutex, pdMS_TO_TICKS(10)) == pdTRUE){
-            if(cmd.action == "Pose"){
-                move_sequence(cmd.name.c_str());
-            }
-            xSemaphoreGive(commands_Mutex);
+        if(cmd.action == "Pose"){
+            move_sequence(cmd.name.c_str());
         }
+
 
         //Execute direct actions for fingers
         if(xSemaphoreTake(finger_wrist_Mutex, pdMS_TO_TICKS(10)) == pdTRUE){

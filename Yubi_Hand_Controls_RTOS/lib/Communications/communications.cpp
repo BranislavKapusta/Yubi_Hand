@@ -78,7 +78,7 @@ void process_communication_msgs(String com_id, String msg){
         int pose_index = msg.indexOf(',', marking_index + 1);
         String pose = msg.substring(marking_index + 1, pose_index);
 
-        infoMsg = "[ Info ] "+com_id+" COM - Recived: " + marking + pose;
+        infoMsg = "[ Info ] "+com_id+" COM - Recived: " + marking + " " + pose;
         Serial.println(infoMsg);
 
         Act_command act_cmd = {0, "Pose", 0, pose};
