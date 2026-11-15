@@ -51,6 +51,8 @@ The hand is controlled by an ESP32 with a servo board. It can be controlled over
 
 Control code for ESP32: [ Hand_Control ](https://github.com/BranislavKapusta/Yubi_Hand/tree/main/Yubi_Hand_Controls)
 
+Control code for ESP32 with FreeRTOS: [ Hand_Control (RTOS) ](https://github.com/BranislavKapusta/Yubi_Hand/tree/main/Yubi_Hand_Controls_RTOS)
+
 Control from PC: [ PC_Control ](https://github.com/BranislavKapusta/Yubi_Hand/tree/main/Yubi_Hand_Controller_PC)
 
 ---
