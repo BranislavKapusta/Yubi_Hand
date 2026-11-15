@@ -6,6 +6,7 @@
 #include <Wire.h>
 
 #include "LittleFS.h"
+#include "FastIMU.h"
 
 #include "communications.h"
 #include "main_control.h"
@@ -27,7 +28,7 @@ void setup() {
     //init_wrist_motors_setup();
     init_main_control();
 
-    init_calibration_orientation_sensor();
+    init_orientation_sensor();
 
     
     xTaskCreatePinnedToCore(motor_control_thread, "motor_control", 4096, NULL, 4, NULL, 1);

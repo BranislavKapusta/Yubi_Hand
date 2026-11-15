@@ -17,7 +17,7 @@ struct Orientation_angles_accel{
 void init_orientation_sensor();
 void orientation_sensor_thread(void *pv);
 void orientation_sensor_update();
-void init_calibration_orientation_sensor();
+void calibration_orientation_sensor();
 Orientation_angles_accel orientation_sensor_getAngles();
 void orientationSensorRead();
 void calculateAcceAngles();

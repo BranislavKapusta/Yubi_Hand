@@ -17,6 +17,7 @@ SemaphoreHandle_t finger_wrist_Mutex = NULL;
 //### Functions ########################################################
 void init_finger_wrist_mutex() {                     // call from setup(), before starting tasks
     finger_wrist_Mutex = xSemaphoreCreateMutex();
+    Serial.println("[ Info ] Motor Control - Init done");
 }
 
 void motor_control_thread(void *pv) {

@@ -38,7 +38,7 @@ void init_main_control(){
     default_pose();
 
     init_function_done = true;
-    Serial.println("[ Info ] Control - F-W Init done");
+    Serial.println("[ Info ] Main Control - F-W Init done");
 }
 
 

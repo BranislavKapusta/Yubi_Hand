@@ -5,7 +5,6 @@
 
 //### Variables and Constants ##########################################
 MPU6500 IMU;
-
 calData calib = { 0 };
 
 unsigned long prevTime;
@@ -29,6 +28,7 @@ static String infMsg = "";
 //### Functions ########################################################
 void init_orientation_sensor(){
     int err = IMU.init(calib, 0x68);
+    Serial.println(" --- Sensor init --------------------------------");
     if (err != 0) {
         Serial.print("[ Erro ] Sen.Ori - Sensor init - Failed - ERROR: ");
         Serial.println(err);
@@ -48,30 +48,14 @@ void orientation_sensor_thread(void *pv) {
 }
 
 void orientation_sensor_update(){
-    if(!init_orientation_calibration_bool)init_calibration_orientation_sensor();
+    if(!init_orientation_calibration_bool)calibration_orientation_sensor();
 
     orientationSensorRead();
     calculateAcceAngles();
     
-    /*
-    Serial.print("Offset Angles - Pitch: ");
-    Serial.print(accelAnglePitchOffset);
-    Serial.print(" Roll: ");
-    Serial.print(accelAngleRollOffset);
-    Serial.print(" Yaw: ");
-    Serial.print(accelAngleYawOffset);
-    Serial.println(" - ");
-
-    Serial.print("Angles - Pitch: ");
-    Serial.print( (accelAnglePitch - accelAnglePitchOffset ));
-    Serial.print(" Roll: ");
-    Serial.print( (accelAngleRoll - accelAngleRollOffset));
-    Serial.print(" Yaw: ");
-    Serial.print( (accelAngleYaw - accelAngleYawOffset));
-    Serial.println(" - ");
-    */
 
     infMsg ="[ Info ] Angles: P > " + String((accelAnglePitch - accelAnglePitchOffset )) + "°" + " R >" + String((accelAngleRoll - accelAngleRollOffset)) + "°" + " Y >" + String((accelAngleYaw - accelAngleYawOffset));
+    //infMsg ="[ Info ] Angles: P > " + String(accelAnglePitch) + "°" + " R >" + String(accelAngleRoll) + "°" + " Y >" + String(accelAngleYaw);
     Serial.println(infMsg);        
 }
 
@@ -84,7 +68,7 @@ Orientation_angles_accel orientation_sensor_getAngles(){
     return angles;
 }
 
-void init_calibration_orientation_sensor(){
+void calibration_orientation_sensor(){
     static unsigned long startTime = 0;
 
     static int numberOfData = 0;
