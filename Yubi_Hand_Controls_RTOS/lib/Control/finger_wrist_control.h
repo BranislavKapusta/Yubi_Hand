@@ -16,10 +16,8 @@ struct Dir_cmd_msg{
 
 //### Variables and Constants ##########################################
 extern SemaphoreHandle_t finger_wrist_Mutex;
-extern QueueHandle_t dirControl_cmd_Queue;
 
 //### Functions ########################################################
 void init_finger_wrist_mutex();
 void motor_control_thread(void *pv);
 void control_movement();
-void direct_control_movement();

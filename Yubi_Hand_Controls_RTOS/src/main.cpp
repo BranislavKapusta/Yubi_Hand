@@ -3,10 +3,8 @@
 #include <WiFi.h>
 #include <WebServer.h>
 #include <BluetoothSerial.h>
-#include <Wire.h>
 
 #include "LittleFS.h"
-#include "FastIMU.h"
 
 #include "communications.h"
 #include "main_control.h"
@@ -15,12 +13,8 @@
 #include "wrist.h"
 #include "led_indicators.h"
 
-#include "orientation_sensor.h"
 
 void setup() {
-    Wire.begin();
-    delay(1000); // needed for the wire initialization - dont know why
-
     init_led_indicators();
     init_communications();
     init_finger_wrist_mutex();
@@ -28,14 +22,9 @@ void setup() {
     init_wrist_motors_setup();
     init_main_control();
 
-    init_orientation_sensor();
-
-    
     xTaskCreatePinnedToCore(motor_control_thread, "motor_control", 4096, NULL, 4, NULL, 1);
     xTaskCreatePinnedToCore(control_thread, "main_control", 4096, NULL, 3, NULL, 1);
     xTaskCreatePinnedToCore(led_indicators_thread, "led_indicators", 2048, NULL, 1, NULL, 1);
-    xTaskCreatePinnedToCore(orientation_sensor_thread, "orientation_sensor",4096, NULL, 4, NULL, 1);
-
     xTaskCreatePinnedToCore(communication_thread, "communications", 8192, NULL, 2, NULL, 0);
 }
 
