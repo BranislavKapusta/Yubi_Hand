@@ -2,6 +2,7 @@
 #include <Wire.h>
 #include "FastIMU.h"
 
+#include "finger_wrist_control.h"
 
 //### Variables and Constants ##########################################
 MPU6500 IMU;
@@ -12,9 +13,8 @@ unsigned long prevTime;
 bool init_orientation_calibration_bool = false;
 
 AccelData accelData;
-float accelX, accelY, accelZ;
-float accelAngleRoll, accelAnglePitch, accelAngleYaw;
-float accelAngleRollOffset, accelAnglePitchOffset, accelAngleYawOffset;
+OrientationAnglesAccel accelAngles; 
+OrientationAnglesAccel accelOffset;
 
 GyroData gyroData;
 float gyroX, gyroY, gyroZ;
@@ -23,12 +23,13 @@ float gyroAngleRollOffset, gyroAnglePitchOffset, gyroAngleYawOffset;
 
 static String infMsg = "";
 
+static Dir_cmd_msg dirControlQueueMsg = { -1, -1};
+
 //### Class functions ##################################################
 
 //### Functions ########################################################
 void init_orientation_sensor(){
     int err = IMU.init(calib, 0x68);
-    Serial.println(" --- Sensor init --------------------------------");
     if (err != 0) {
         Serial.print("[ Erro ] Sen.Ori - Sensor init - Failed - ERROR: ");
         Serial.println(err);
@@ -48,22 +49,32 @@ void orientation_sensor_thread(void *pv) {
 }
 
 void orientation_sensor_update(){
-    if(!init_orientation_calibration_bool)calibration_orientation_sensor();
+    if(!init_orientation_calibration_bool) calibration_orientation_sensor();
 
-    orientationSensorRead();
-    calculateAcceAngles();
+    orientation_sensor_read();
+    calculate_accel_angles();
     
+    //Send via dirrect control
+    OrientationAnglesAccel angles = orientation_sensor_getAngles();
 
-    infMsg ="[ Info ] Angles: P > " + String((accelAnglePitch - accelAnglePitchOffset )) + "°" + " R >" + String((accelAngleRoll - accelAngleRollOffset)) + "°" + " Y >" + String((accelAngleYaw - accelAngleYawOffset));
-    //infMsg ="[ Info ] Angles: P > " + String(accelAnglePitch) + "°" + " R >" + String(accelAngleRoll) + "°" + " Y >" + String(accelAngleYaw);
-    Serial.println(infMsg);        
+    infMsg ="[ TEST ] Angles: P > " + String(angles.pitchAngle) + " deg" + " R >" + String(angles.rollAngle) + " deg" + " Y >" + String(angles.yawAngle) + " deg";
+    Serial.println(infMsg);
+
+    //Send via dirrect control
+    if(angles.pitchAngle > 90){
+        dirControlQueueMsg = {6, (float(180) - angles.pitchAngle)};
+        xQueueSend(dirControl_cmd_Queue, &dirControlQueueMsg, 0); 
+    }else{
+        dirControlQueueMsg = {6, 90};
+        xQueueSend(dirControl_cmd_Queue, &dirControlQueueMsg, 0); 
+    }
 }
 
-Orientation_angles_accel orientation_sensor_getAngles(){
-    Orientation_angles_accel angles;
-    angles.pitchAngle = accelAnglePitch - accelAnglePitchOffset;
-    angles.rollAngle = accelAngleRoll - accelAngleRollOffset;
-    angles.yawAngle = accelAngleYaw - accelAngleYawOffset;
+OrientationAnglesAccel orientation_sensor_getAngles(){
+    OrientationAnglesAccel angles;
+    angles.pitchAngle = accelAngles.pitchAngle - accelOffset.pitchAngle;
+    angles.rollAngle = accelAngles.rollAngle - accelOffset.rollAngle;
+    angles.yawAngle = accelAngles.yawAngle - accelOffset.yawAngle;
 
     return angles;
 }
@@ -79,36 +90,32 @@ void calibration_orientation_sensor(){
     if(startTime == 0) startTime = millis();
 
     if( millis() - startTime < 1000){
-        orientationSensorRead();
-        calculateAcceAngles();
+        orientation_sensor_read();
+        calculate_accel_angles();
 
-        accelPichAccumulated += accelAnglePitch;
-        accelRollAccumulated += accelAngleRoll;
-        accelYawAccumulated += accelAngleYaw;
+        accelPichAccumulated += accelAngles.pitchAngle;
+        accelRollAccumulated += accelAngles.rollAngle;
+        accelYawAccumulated += accelAngles.yawAngle;
         numberOfData++;
     }else{
-        accelAnglePitchOffset = accelPichAccumulated/numberOfData;
-        accelAngleRollOffset = accelRollAccumulated/numberOfData;
-        accelAngleYawOffset = accelYawAccumulated/numberOfData;
+        accelOffset.pitchAngle = accelPichAccumulated/numberOfData;
+        accelOffset.rollAngle = accelRollAccumulated/numberOfData;
+        accelOffset.yawAngle = accelYawAccumulated/numberOfData;
 
         init_orientation_calibration_bool = true;
     }
 }
 
-void orientationSensorRead(){
+void orientation_sensor_read(){
     IMU.update();
     IMU.getAccel(&accelData);
     IMU.getGyro(&gyroData);
 }
 
-void calculateAcceAngles(){
-    accelX = accelData.accelX;
-    accelY = accelData.accelY;
-    accelZ = accelData.accelZ;
-
-    accelAngleRoll = atan(accelY / sqrt(accelX*accelX + accelZ*accelZ))*1/(3.142/180);
-    accelAnglePitch = -atan(accelX / sqrt(accelY*accelY + accelZ*accelZ))*1/(3.142/180);
-    accelAngleYaw = atan(accelZ / sqrt(accelY*accelY + accelX*accelX))*1/(3.142/180);
+void calculate_accel_angles(){
+    accelAngles.rollAngle = atan(accelData.accelY / sqrt(accelData.accelX*accelData.accelX + accelData.accelZ*accelData.accelZ))*1/(M_PI/180);
+    accelAngles.pitchAngle = -atan(accelData.accelX / sqrt(accelData.accelY*accelData.accelY + accelData.accelZ*accelData.accelZ))*1/(M_PI/180);
+    accelAngles.yawAngle = atan(accelData.accelZ / sqrt(accelData.accelY*accelData.accelY + accelData.accelX*accelData.accelX))*1/(M_PI/180);
 }
 
 void calculateIntegralGyro(){

@@ -217,27 +217,6 @@ bool safty_lossOfConnection(){
     }
 }
 
-/*
-Rework to command style with 0 wait or leave it like this because there can be prewious commands - so make check to delete prewious commands
-void move_single(uint8_t index, float pos){
-    if(index < FINGER_NUM){
-        fingers[index].setPos(pos);
-    }else if(index > (FINGER_NUM-1) && index < (FINGER_NUM+WRIST_NUM)){
-        wrists[index - FINGER_NUM].setPos(pos);
-    }
-}
-
-void move_multy(float pos[8]){
-    for(int i = 0; i < FINGER_NUM; i++){
-        fingers[i].setPos(pos[i]);    
-    }
-    for(int i=0; i < WRIST_NUM; i++){
-        wrists[i].setPos(pos[i+FINGER_NUM]);
-    }
-    
-}
-*/
-
 void move_sequence(const char* pose){
     pos_command_reset(); //Every new sequence is reseting for the previews commands
 

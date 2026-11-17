@@ -22,7 +22,6 @@ void init_bluetooth_com(){
 
 void check_bluetooth_communication(){
     if(serialBlueToothCom.available()){
-        //process_bluetooth_message(serialBlueToothCom.readStringUntil('\n'));
         process_communication_msgs("Bluetooth",serialBlueToothCom.readStringUntil('\n'));
     }
 

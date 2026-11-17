@@ -3,7 +3,7 @@
 #include "FastIMU.h"
 
 //### Class ##########################################
-struct Orientation_angles_accel{
+struct OrientationAnglesAccel{
     float pitchAngle;
     float rollAngle;
     float yawAngle;
@@ -18,7 +18,7 @@ void init_orientation_sensor();
 void orientation_sensor_thread(void *pv);
 void orientation_sensor_update();
 void calibration_orientation_sensor();
-Orientation_angles_accel orientation_sensor_getAngles();
-void orientationSensorRead();
-void calculateAcceAngles();
-void calculateIntegralGyro();
+OrientationAnglesAccel orientation_sensor_getAngles();
+void orientation_sensor_read();
+void calculate_accel_angles();
+void calculate_integral_gyro();

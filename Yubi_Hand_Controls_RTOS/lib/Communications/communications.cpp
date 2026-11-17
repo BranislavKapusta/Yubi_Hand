@@ -17,7 +17,7 @@ void communication_thread(void *pv) {
         server.handleClient();
         check_serial_communication();
         check_bluetooth_communication();
-        vTaskDelay(pdMS_TO_TICKS(5));   // yield to other tasks
+        vTaskDelay(pdMS_TO_TICKS(50));   // yield to other tasks
     }
 }
 
@@ -39,7 +39,7 @@ void process_communication_msgs(String com_id, String msg){
     }
 
     // Finger and Wrist pose commands, individual positions
-    if(marking == "POS001"){
+    if(marking == "POS001" || marking == "WPOS01" || marking == "WPOSM1"){
         //Msg format - XXXXXX, time, n1, n2, n3, n4, n5, n6, n7, n8
 
         //Index search
@@ -69,8 +69,13 @@ void process_communication_msgs(String com_id, String msg){
         
         Pos_command serialCommunicationCommand = {(int)time, (int)n1, (int)n2, (int)n3, (int)n4, (int)n5, (int)n6, (int)n7, (int)n8};
 
-        pos_command_add(serialCommunicationCommand);
         //Add command to the position commands
+        if(marking == "POS001"){
+            pos_command_add(serialCommunicationCommand);
+        }else if(marking == "WPOS01" || marking == "WPOSM1"){
+            pos_command_reset();
+            pos_command_add(serialCommunicationCommand);
+        }
     }
 
     // Pose - pre defined poses of fingers

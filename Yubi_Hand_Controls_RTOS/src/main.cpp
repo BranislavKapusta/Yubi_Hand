@@ -25,7 +25,7 @@ void setup() {
     init_communications();
     init_finger_wrist_mutex();
     init_finger_motors_setup();
-    //init_wrist_motors_setup();
+    init_wrist_motors_setup();
     init_main_control();
 
     init_orientation_sensor();

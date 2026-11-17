@@ -109,9 +109,13 @@ void init_led_indicators(){
 }
 
 void led_indicators_thread(void *pv) {
+    Led_cmd_msg led_msg;
     for (;;) {
+        if(xQueueReceive(led_cmd_Queue, &led_msg, pdMS_TO_TICKS(50)) == pdTRUE){
+            led_msg_handle(led_msg);
+        }
         led_indicators_update();
-        vTaskDelay(pdMS_TO_TICKS(50));
+        //vTaskDelay(pdMS_TO_TICKS(50));
     }
 }
 
@@ -135,10 +139,12 @@ static void led_msg_handle(const Led_cmd_msg &msg){
 
 void led_indicators_update(){
     //Recive msgs from Queue
+    /*
     Led_cmd_msg led_msg;
     if(xQueueReceive(led_cmd_Queue, &led_msg, pdMS_TO_TICKS(20)) == pdTRUE){
         led_msg_handle(led_msg);
     }
+    */
 
     for(int i=0; i < LED_INDICATORS_NUM; i++) led_indicators[i].update();
 };

@@ -99,7 +99,7 @@ void handleSetSingle() {
         int val = server.arg("val").toInt();
         
         //Build the msg
-        msg = "POS001, 0";
+        msg = "WPOS01, 0";
         for (int i = 0; i < 8; i++){
             if(i == index){
                 msg +=",";
@@ -135,7 +135,7 @@ void handleSetMulty() {
     }
 
     if (allFound) {
-        msg = "POS001, 0";
+        msg = "WPOSM1, 0";
         for (int i = 0; i < 8; i++){
             msg += ",";
             msg += String(values[i]);

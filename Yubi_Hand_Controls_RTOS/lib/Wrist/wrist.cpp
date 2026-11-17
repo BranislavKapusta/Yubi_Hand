@@ -98,6 +98,6 @@ int Wrist::_convertAngles(float angleDeg){
 //### Functions ########################################################
 void init_wrist_motors_setup(){
     for(int i=0; i<WRIST_NUM; i++){
-        wrists[i].init(wrists_pins[i], wrists_lowerLimits_pos[i],wrists_upperLimits_pos[i],wrists_default_pos[i],(float)1);
+        wrists[i].init(wrists_pins[i], wrists_lowerLimits_pos[i],wrists_upperLimits_pos[i],wrists_default_pos[i],(float)1000);
     }
 }
